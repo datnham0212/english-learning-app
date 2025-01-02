@@ -1,53 +1,82 @@
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { TransitionPresets } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Settings from './tabs/Settings';
+import Compete from './tabs/Compete';
+import Dictionary from './tabs/Dictionary';
+import Leaderboard from './tabs/Leaderboard';
+
+const Stack = createStackNavigator();
+
+function HomeScreen({ navigation }) {
+  return (
+    <>
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <StatusBar style="auto" />
+      </View>
+      
+      <View style={styles.buttonContainer}>
+        <View style={styles.button}>
+          <Button 
+            title="Start" 
+            onPress={() => console.log('Start button pressed!')}
+          />
+        </View>
+      </View>
+
+      <View style={styles.navigationContainer}>
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Home')}>
+          <Ionicons name="home" size={32} color="white" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Compete')}>
+          <Ionicons name="shield" size={32} color="white" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Leaderboard')}>
+          <Ionicons name="trophy" size={32} color="white" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Dictionary')}>
+          <Ionicons name="book" size={32} color="white" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Settings')}>
+          <Ionicons name="settings" size={32} color="white" />
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+}
 
 export default function App() {
   return (
-  <>
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-    
-    <View style={styles.buttonContainer}>
-      <View style={styles.button}>
-        <Button 
-          title="Start" 
-          onPress={() => console.log('Start button pressed!')}
-        />
-      </View>
-    </View>
-
-    <View style={styles.navigationContainer}>
-      <TouchableOpacity style={styles.icon} onPress={() => console.log('Icon pressed!')}>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => console.log('Icon pressed!')}>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => console.log('Icon pressed!')}>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => console.log('Icon pressed!')}>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => console.log('Icon pressed!')}>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
-      </TouchableOpacity>
-    </View>
-  </>
+    <NavigationContainer>
+      <Stack.Navigator 
+        initialRouteName="Home"
+        screenOptions={{
+          ...TransitionPresets.RevealFromBottomAndroid,
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="Compete" component={Compete} />
+        <Stack.Screen name="Dictionary" component={Dictionary} />
+        <Stack.Screen name="Leaderboard" component={Leaderboard} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
