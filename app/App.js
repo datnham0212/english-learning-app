@@ -3,14 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { TransitionPresets } from '@react-navigation/stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Settings from './tabs/Settings';
-import Compete from './tabs/Compete';
-import Dictionary from './tabs/Dictionary';
-import Leaderboard from './tabs/Leaderboard';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import Navbar from './navbar/navbar';
 
 const Stack = createStackNavigator();
+
+const Settings = React.lazy(() => import('./tabs/Settings'));
+const Compete = React.lazy(() => import('./tabs/Compete'));
+const Dictionary = React.lazy(() => import('./tabs/Dictionary'));
+const Leaderboard = React.lazy(() => import('./tabs/Leaderboard'));
 
 function HomeScreen({ navigation }) {
   return (
@@ -29,27 +30,7 @@ function HomeScreen({ navigation }) {
         </View>
       </View>
 
-      <View style={styles.navigationContainer}>
-        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Home')}>
-          <Ionicons name="home" size={32} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Compete')}>
-          <Ionicons name="shield" size={32} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Leaderboard')}>
-          <Ionicons name="trophy" size={32} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Dictionary')}>
-          <Ionicons name="book" size={32} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('Settings')}>
-          <Ionicons name="settings" size={32} color="white" />
-        </TouchableOpacity>
-      </View>
+      <Navbar navigation={navigation} />
     </>
   );
 }
@@ -60,7 +41,8 @@ export default function App() {
       <Stack.Navigator 
         initialRouteName="Home"
         screenOptions={{
-          ...TransitionPresets.RevealFromBottomAndroid,
+          ...TransitionPresets.ModalFadeTransition,
+          headerLeft: () => null,
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -88,16 +70,5 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     justifyContent: 'center',
-  },
-  navigationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20,
-    backgroundColor: '#333',
-    paddingHorizontal: 10,
-  },
-  icon: {
-    padding: 10,
   }
 });
