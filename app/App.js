@@ -13,7 +13,7 @@ const Compete = React.lazy(() => import('./tabs/Compete'));
 const Dictionary = React.lazy(() => import('./tabs/Dictionary'));
 const Leaderboard = React.lazy(() => import('./tabs/Leaderboard'));
 
-function HomeScreen({ navigation }) {
+const HomeScreen = React.memo(({ navigation }) => {
   return (
     <>
       <View style={styles.container}>
@@ -33,24 +33,26 @@ function HomeScreen({ navigation }) {
       <Navbar navigation={navigation} />
     </>
   );
-}
+});
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator 
-        initialRouteName="Home"
-        screenOptions={{
-          ...TransitionPresets.ModalFadeTransition,
-          headerLeft: () => null,
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Compete" component={Compete} />
-        <Stack.Screen name="Dictionary" component={Dictionary} />
-        <Stack.Screen name="Leaderboard" component={Leaderboard} />
-      </Stack.Navigator>
+      <React.Suspense fallback={<Text>Loading...</Text>}>
+        <Stack.Navigator 
+          initialRouteName="Home"
+          screenOptions={{
+            ...TransitionPresets.ModalFadeTransition,
+            headerLeft: () => null,
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Compete" component={Compete} />
+          <Stack.Screen name="Dictionary" component={Dictionary} />
+          <Stack.Screen name="Leaderboard" component={Leaderboard} />
+        </Stack.Navigator>
+      </React.Suspense>
     </NavigationContainer>
   );
 }
