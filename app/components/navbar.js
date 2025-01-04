@@ -4,15 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function Navbar({ navigation }) {
   const handlePress = (routeName) => {
-    const currentRoute = navigation.getState().routes[navigation.getState().index].name;
-    if (currentRoute === routeName) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: routeName }],
-      });
-    } else {
-      navigation.navigate(routeName);
-    }
+    navigation.navigate(routeName);
   };
 
   return (

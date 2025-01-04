@@ -4,7 +4,7 @@ import { TransitionPresets } from '@react-navigation/stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Navbar from './navbar/navbar';
+import Navbar from './components/navbar';
 
 const Stack = createStackNavigator();
 
@@ -60,7 +60,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import Navbar from '../navbar/navbar';
+import Navbar from '../components/navbar';
 
 export default function Settings({ navigation }) {
   return (
