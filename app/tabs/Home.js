@@ -94,9 +94,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   slide: {
-    width,
+    width: width * 0.8,
+    borderRadius: width * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: width * 0.1,
+    marginVertical: 10,
   },
   slideText: {
     fontSize: 24,
