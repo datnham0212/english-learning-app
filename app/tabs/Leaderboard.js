@@ -1,17 +1,13 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import Navbar from '../components/navbar';
+import * as React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function Leaderboard({ navigation }) {
+const Leaderboard = React.memo(() => {
   return (
-  <>
     <View style={styles.container}>
       <Text>This is the leaderboard page!</Text>
     </View>
-    <Navbar navigation={navigation} />
-  </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -20,3 +16,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default Leaderboard;

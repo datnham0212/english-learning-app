@@ -1,47 +1,51 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import * as React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function Navbar({ navigation }) {
-  const handlePress = (routeName) => {
-    navigation.navigate(routeName);
-  };
+import Settings from '../tabs/Settings';
+import Compete from '../tabs/Compete';
+import Dictionary from '../tabs/Dictionary';
+import Leaderboard from '../tabs/Leaderboard';
+import Home from '../tabs/Home'; 
 
+const Tab = createBottomTabNavigator();
+
+export default function Navbar() {
   return (
-    <View style={styles.navigationContainer}>
-      <TouchableOpacity style={styles.icon} onPress={() => handlePress('Home')}>
-        <Ionicons name="home" size={32} color="white" />
-      </TouchableOpacity>
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
 
-      <TouchableOpacity style={styles.icon} onPress={() => handlePress('Compete')}>
-        <Ionicons name="shield" size={32} color="white" />
-      </TouchableOpacity>
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Compete') {
+              iconName = 'shield';
+            } else if (route.name === 'Leaderboard') {
+              iconName = 'trophy';
+            } else if (route.name === 'Dictionary') {
+              iconName = 'book';
+            } else if (route.name === 'Settings') {
+              iconName = 'settings';
+            }
 
-      <TouchableOpacity style={styles.icon} onPress={() => handlePress('Leaderboard')}>
-        <Ionicons name="trophy" size={32} color="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => handlePress('Dictionary')}>
-        <Ionicons name="book" size={32} color="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.icon} onPress={() => handlePress('Settings')}>
-        <Ionicons name="settings" size={32} color="white" />
-      </TouchableOpacity>
-    </View>
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Compete" component={Compete} />
+        <Tab.Screen name="Leaderboard" component={Leaderboard} />
+        <Tab.Screen name="Dictionary" component={Dictionary} />
+        <Tab.Screen name="Settings" component={Settings} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  navigationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20,
-    backgroundColor: '#333',
-    paddingHorizontal: 10,
-  },
-  icon: {
-    padding: 10,
-  }
-});
