@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
-import Slider from '@react-native-community/slider';
+import { Slider } from 'react-native-awesome-slider';
+import { useSharedValue } from 'react-native-reanimated';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Switch } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,18 +13,33 @@ const Settings = React.memo(() => {
 
   const toggleDarkMode = () => setIsDarkMode(previousState => !previousState);
 
+  const progress = useSharedValue(30);
+  const min = useSharedValue(0);
+  const max = useSharedValue(100);
+
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={styles.container}>
       <View style={styles.option}>
         <Text style={styles.optionName}>Volume</Text>
-        <Slider
-          style={{ width: width * 0.75 }}
-          minimumValue={0}
-          maximumValue={100}
-          value={50}
-          thumbTintColor='white'
-          minimumTrackTintColor="dodgerblue"
-          maximumTrackTintColor="#000000"
+        <Slider 
+        progress={progress} 
+        minimumValue={min} 
+        maximumValue={max} 
+        sliderHeight={20}
+        thumbWidth={20}
+        thumbHeight={20}
+        style={{
+          borderRadius: 10,
+          borderColor: 'transparent',
+          overflow: 'hidden',
+        }}
+        theme={{
+          minimumTrackTintColor: 'dodgerblue',
+          maximumTrackTintColor: '#DEDEDE',
+          cacheTrackTintColor: 'dodgerblue',
+          bubbleBackgroundColor: 'dodgerblue',
+        }}
         />
       </View>
 
@@ -61,6 +78,7 @@ const Settings = React.memo(() => {
         </View>
       </View>
     </View>
+    </GestureHandlerRootView>
   );
 });
 
