@@ -8,7 +8,7 @@ import Settings from '../tabs/Settings';
 import Compete from '../tabs/Compete';
 import Dictionary from '../tabs/Dictionary';
 import Leaderboard from '../tabs/Leaderboard';
-import Home from '../tabs/Home';
+import Main from '../tabs/Main';
 import Message from '../tabs/Message';
 import UserProfile from '../components/userProfile';
 
@@ -18,7 +18,7 @@ const HomeStack = createStackNavigator();
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={Home} options={{ headerTitle: () => <UserProfile /> }} />
+      <HomeStack.Screen name="Main" component={Main} options={{ headerTitle: () => <UserProfile /> }} />
       <HomeStack.Screen name="Message" component={Message} />
     </HomeStack.Navigator>
   );

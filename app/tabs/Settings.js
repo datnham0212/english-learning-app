@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Slider from '@react-native-community/slider';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Switch } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 const Settings = React.memo(() => {
   const [checked, setChecked] = useState('en');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleDarkMode = () => setIsDarkMode(previousState => !previousState);
 
   return (
     <View style={styles.container}>
@@ -22,12 +25,28 @@ const Settings = React.memo(() => {
           maximumTrackTintColor="#000000"
         />
       </View>
+
       <View style={styles.option}>
         <Text style={styles.optionName}>Difficulty</Text>
       </View>
+
       <View style={styles.option}>
         <Text style={styles.optionName}>Dark Mode</Text>
+        <View style={[
+          styles.switchContainer,
+          { backgroundColor: isDarkMode ? "dodgerblue" : "#767577", alignItems: isDarkMode ? 'flex-end' : 'flex-start' }
+        ]}>
+          <Switch
+            trackColor={{ false: "#767577", true: "dodgerblue" }}
+            thumbColor="#f4f3f4"
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleDarkMode}
+            value={isDarkMode}
+            style={styles.iosSwitch}
+          />
+        </View>
       </View>
+
       <View style={styles.option}>
         <Text style={styles.optionName}>Language</Text>
         <View style={styles.radioButtonContainer}>
@@ -58,13 +77,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'lightgray',
     margin: 15,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
   optionName: {
     fontSize: 15,
     fontWeight: 'bold',
-    marginRight: 10,
   },
   radioButtonContainer: {
     flexDirection: 'row',
@@ -84,6 +103,16 @@ const styles = StyleSheet.create({
   selectedFlag: {
     borderWidth: 2,
     borderColor: 'dodgerblue',
+  },
+  iosSwitch: {
+    transform: [{ scaleX: 1.25 }, { scaleY: 1.25 }],
+  },
+  switchContainer: {
+    width: 50,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    padding: 5,
   },
 });
 

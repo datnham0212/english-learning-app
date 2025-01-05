@@ -35,7 +35,7 @@ const Pagination = ({ index }) => {
   );
 };
 
-const Home = React.memo(() => {
+const Main = React.memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleViewableItemsChanged = ({ viewableItems }) => {
@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Main;
