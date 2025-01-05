@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -8,20 +8,21 @@ import Settings from '../tabs/Settings';
 import Compete from '../tabs/Compete';
 import Dictionary from '../tabs/Dictionary';
 import Leaderboard from '../tabs/Leaderboard';
-import Home from '../tabs/Home'; 
+import Home from '../tabs/Home';
+import Message from '../tabs/Message';
+import UserProfile from '../components/userProfile';
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
 
-// User Profile component
-const UserProfile = () => (
-  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: 'dodgerblue', marginRight: 5, marginLeft: -5 }} />
-    <Text style={{ fontSize: 20 }}>Username</Text>
-  </View>
-  <Ionicons name="mail" size={34} color="dodgerblue" onPress={() => console.log('Mail')} />
-  </View>
-);
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={Home} options={{ headerTitle: () => <UserProfile /> }} />
+      <HomeStack.Screen name="Message" component={Message} />
+    </HomeStack.Navigator>
+  );
+}
 
 export default function Navbar() {
   return (
@@ -52,7 +53,7 @@ export default function Navbar() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={Home} options={{ headerTitle: () => <UserProfile /> }} />
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }} />
         <Tab.Screen name="Compete" component={Compete} options={{ headerShown: false }} />
         <Tab.Screen name="Leaderboard" component={Leaderboard} options={{ headerShown: false }} />
         <Tab.Screen name="Dictionary" component={Dictionary} options={{ headerShown: false }} />
