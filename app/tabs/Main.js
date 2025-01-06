@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 80,
   },
   button: {
     width: 100,
-    height: 40,
+    height: 50,
     justifyContent: 'center',
   },
   slide: {
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: width * 0.1,
     marginVertical: 10,
+    marginTop: 50,
   },
   slideText: {
     fontSize: 24,

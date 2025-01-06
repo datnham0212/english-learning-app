@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Slider } from 'react-native-awesome-slider';
+import { Switch } from 'react-native-switch';
 import { useSharedValue } from 'react-native-reanimated';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const Settings = React.memo(() => {
   const [checked, setChecked] = useState('en');
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleDarkMode = () => setIsDarkMode(previousState => !previousState);
+  const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
 
   const progress = useSharedValue(30);
   const min = useSharedValue(0);
@@ -19,65 +18,75 @@ const Settings = React.memo(() => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-    <View style={styles.container}>
-      <View style={styles.option}>
-        <Text style={styles.optionName}>Volume</Text>
-        <Slider 
-        progress={progress} 
-        minimumValue={min} 
-        maximumValue={max} 
-        sliderHeight={20}
-        thumbWidth={20}
-        thumbHeight={20}
-        style={{
-          borderRadius: 10,
-          borderColor: 'transparent',
-          overflow: 'hidden',
-        }}
-        theme={{
-          minimumTrackTintColor: 'dodgerblue',
-          maximumTrackTintColor: '#DEDEDE',
-          cacheTrackTintColor: 'dodgerblue',
-          bubbleBackgroundColor: 'dodgerblue',
-        }}
-        />
-      </View>
-
-      <View style={styles.option}>
-        <Text style={styles.optionName}>Difficulty</Text>
-      </View>
-
-      <View style={styles.option}>
-        <Text style={styles.optionName}>Dark Mode</Text>
-        <View style={[
-          styles.switchContainer,
-          { backgroundColor: isDarkMode ? "dodgerblue" : "#767577", alignItems: isDarkMode ? 'flex-end' : 'flex-start' }
-        ]}>
-          <Switch
-            trackColor={{ false: "#767577", true: "dodgerblue" }}
-            thumbColor="#f4f3f4"
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleDarkMode}
-            value={isDarkMode}
-            style={styles.iosSwitch}
+      <View style={styles.container}>
+        <View style={styles.option}>
+          <Text style={styles.optionName}>Volume</Text>
+          <Slider 
+            progress={progress}
+            minimumValue={min} 
+            maximumValue={max} 
+            sliderHeight={20}
+            renderThumb={() => <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#fff' }} />}
+            snapThreshold={5}
+            style={{
+              borderRadius: 10,
+              borderColor: 'transparent',
+              overflow: 'hidden',
+            }}
+            theme={{
+              minimumTrackTintColor: 'dodgerblue',
+              maximumTrackTintColor: '#DEDEDE',
+              bubbleBackgroundColor: 'dodgerblue',
+            }}
           />
         </View>
-      </View>
 
-      <View style={styles.option}>
-        <Text style={styles.optionName}>Language</Text>
-        <View style={styles.radioButtonContainer}>
-          <TouchableOpacity onPress={() => setChecked('en')} style={styles.radioButtonItem}>
-            <Image source={require('../assets/en.png')} style={[styles.flag, checked === 'en' && styles.selectedFlag]} />
-            <Text>English</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setChecked('vi')} style={styles.radioButtonItem}>
-            <Image source={require('../assets/vn.png')} style={[styles.flag, checked === 'vi' && styles.selectedFlag]} />
-            <Text>Vietnamese</Text>
-          </TouchableOpacity>
+        {/* <View style={styles.option}>
+          <Text style={styles.optionName}>Difficulty</Text>
+        </View> */}
+
+        <View style={styles.option}>
+          <Text style={styles.optionName}>Dark Mode</Text>
+          <View>
+            <Switch
+              value={isDarkMode} // Set current state here
+              onValueChange={(val) => {
+                setIsDarkMode(val); // Update state with the new value
+              }}
+              disabled={false}
+              circleSize={30}
+              circleBorderWidth={0}
+              backgroundActive={'dodgerblue'}
+              backgroundInactive={'gray'}
+              circleActiveColor={'#ffffff'}
+              circleInActiveColor={'#ffffff'}
+              changeValueImmediately={true}
+              innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
+              outerCircleStyle={{}}
+              renderActiveText={false}
+              renderInActiveText={false}
+              switchLeftPx={2}
+              switchRightPx={2}
+              switchWidthMultiplier={2}
+              switchBorderRadius={30}
+            />
+          </View>
+        </View>
+
+        <View style={styles.option}>
+          <Text style={styles.optionName}>Language</Text>
+          <View style={styles.radioButtonContainer}>
+            <TouchableOpacity onPress={() => setChecked('en')} style={styles.radioButtonItem}>
+              <Image source={require('../assets/en.png')} style={[styles.flag, checked === 'en' && styles.selectedFlag]} />
+              <Text>English</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setChecked('vi')} style={styles.radioButtonItem}>
+              <Image source={require('../assets/vn.png')} style={[styles.flag, checked === 'vi' && styles.selectedFlag]} />
+              <Text>Vietnamese</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
     </GestureHandlerRootView>
   );
 });
@@ -91,17 +100,18 @@ const styles = StyleSheet.create({
   option: {
     flexDirection: 'row',
     width: width - 20,
-    height: 100,
+    height: 120,
     borderRadius: 10,
     backgroundColor: 'lightgray',
-    margin: 15,
+    margin: 18,
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
   },
   optionName: {
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: 'bold',
+    marginRight: 10,
   },
   radioButtonContainer: {
     flexDirection: 'row',
@@ -119,18 +129,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   selectedFlag: {
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: 'dodgerblue',
-  },
-  iosSwitch: {
-    transform: [{ scaleX: 1.25 }, { scaleY: 1.25 }],
-  },
-  switchContainer: {
-    width: 50,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    padding: 5,
   },
 });
 
