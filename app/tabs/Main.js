@@ -2,15 +2,16 @@ import * as React from 'react';
 import { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, Pressable, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
+import Pagination from '../components/pagination';
 
 const { width } = Dimensions.get('window');
 
-// Replace with actual images or URLs
 const data = [
-  { key: '1', text: 'Slide 1', backgroundImage: require('../assets/sample.jpg') }, // Example local image
-  { key: '2', text: 'Slide 2', backgroundImage: require('../assets/sample.jpg') }, // Example local image
-  { key: '3', text: 'Slide 3', backgroundImage: require('../assets/sample.jpg') }, // Example local image
-  { key: '4', text: 'Slide 4', backgroundImage: require('../assets/sample.jpg') }, // Example local image
+  { key: '1', text: 'Slide 1', backgroundImage: require('../assets/sample.jpg') },
+  { key: '2', text: 'Slide 2', backgroundImage: require('../assets/sample.jpg') },
+  { key: '3', text: 'Slide 3', backgroundImage: require('../assets/sample.jpg') },
+  { key: '4', text: 'Slide 4', backgroundImage: require('../assets/sample.jpg') },
 ];
 
 const renderItem = ({ item, onPress }) => (
@@ -21,24 +22,9 @@ const renderItem = ({ item, onPress }) => (
   </Pressable>
 );
 
-const Pagination = ({ index }) => {
-  return (
-    <View style={styles.pagination}>
-      {data.map((_, i) => (
-        <View
-          key={i}
-          style={[
-            styles.dot,
-            { opacity: i === index ? 1 : 0.3 },
-          ]}
-        />
-      ))}
-    </View>
-  );
-};
-
 const Main = React.memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigation = useNavigation();
 
   const handleViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
@@ -51,7 +37,9 @@ const Main = React.memo(() => {
   };
 
   const handleStartPress = () => {
-    console.log(`Selected Slide ${currentIndex + 1}!`);
+    const slideNumber = currentIndex + 1;
+    console.log(`Selected Slide ${slideNumber}!`);
+    navigation.navigate(`Slide${slideNumber}`);
   };
 
   return (
@@ -67,7 +55,7 @@ const Main = React.memo(() => {
         onViewableItemsChanged={handleViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
       />
-      <Pagination index={currentIndex} />
+      <Pagination index={currentIndex} data={data} />
     </View>
   );
 });
@@ -84,8 +72,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: width * 0.1,
     marginVertical: 70,
-    borderRadius: width * 0.1, // Apply borderRadius to Pressable as well
-    overflow: 'hidden', // Ensures child content respects the border radius
+    borderRadius: width * 0.1,
+    overflow: 'hidden',
   },
   imageBackground: {
     flex: 1,
@@ -93,34 +81,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    borderRadius: width * 0.1, // Apply borderRadius to ImageBackground as well
+    borderRadius: width * 0.1,
   },
   slideText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff', // Ensure text is visible against images
-    textShadowColor: '#000', // Optional: Add text shadow for better visibility
-    textShadowOffset: { width: 1, height: 1 }, // Optional: Offset shadow
-    textShadowRadius: 5, // Optional: Radius of shadow
-  },
-  pagination: {
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: 80,
-  },
-  dot: {
-    height: 10,
-    width: 10,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    margin: 8,
+    color: '#fff',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   shadow: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
-    elevation: 5, // For Android shadow
+    elevation: 5,
   },
 });
 
