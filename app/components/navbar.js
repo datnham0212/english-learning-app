@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import Settings from '../tabs/Settings';
 import Compete from '../tabs/Compete';
 // import Dictionary from '../tabs/Dictionary';
@@ -19,7 +18,11 @@ const HomeStack = createStackNavigator();
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        ...TransitionPresets.ScaleFromCenterAndroid,
+      }}
+    >
       <HomeStack.Screen name="Main" component={Main} options={{ headerTitle: () => <UserProfile /> }} />
       <HomeStack.Screen name="Message" component={Message} />
       <HomeStack.Screen name="Slide1" component={Slide1} />
