@@ -12,6 +12,12 @@ import Message from '../tabs/Message';
 import UserProfile from '../components/userProfile';
 import Slide1 from '../games/Slide1';
 import Game1 from '../games/Game1';
+import Slide2 from '../games/Slide2';
+import Game2 from '../games/Game2';
+import Slide3 from '../games/Slide3';
+import Game3 from '../games/Game3';
+import Slide4 from '../games/Slide4';
+import Game4 from '../games/Game4';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -27,6 +33,12 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Message" component={Message} />
       <HomeStack.Screen name="Slide1" component={Slide1} />
       <HomeStack.Screen name="Game1" component={Game1} />
+      <HomeStack.Screen name="Slide1" component={Slide2} />
+      <HomeStack.Screen name="Game1" component={Game2} />
+      <HomeStack.Screen name="Slide1" component={Slide3} />
+      <HomeStack.Screen name="Game1" component={Game3} />
+      <HomeStack.Screen name="Slide1" component={Slide4} />
+      <HomeStack.Screen name="Game1" component={Game4} />
     </HomeStack.Navigator>
   );
 }
