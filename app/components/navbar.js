@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import Settings from '../tabs/Settings';
 import Compete from '../tabs/Compete';
-// import Dictionary from '../tabs/Dictionary';
+import Dictionary from '../tabs/Dictionary';
 // import Leaderboard from '../tabs/Leaderboard';
 import Main from '../tabs/Main';
 import Message from '../tabs/Message';
@@ -33,12 +33,12 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Message" component={Message} />
       <HomeStack.Screen name="Slide1" component={Slide1} />
       <HomeStack.Screen name="Game1" component={Game1} />
-      <HomeStack.Screen name="Slide1" component={Slide2} />
-      <HomeStack.Screen name="Game1" component={Game2} />
-      <HomeStack.Screen name="Slide1" component={Slide3} />
-      <HomeStack.Screen name="Game1" component={Game3} />
-      <HomeStack.Screen name="Slide1" component={Slide4} />
-      <HomeStack.Screen name="Game1" component={Game4} />
+      <HomeStack.Screen name="Slide2" component={Slide2} />
+      <HomeStack.Screen name="Game2" component={Game2} />
+      <HomeStack.Screen name="Slide3" component={Slide3} />
+      <HomeStack.Screen name="Game3" component={Game3} />
+      <HomeStack.Screen name="Slide4" component={Slide4} />
+      <HomeStack.Screen name="Game4" component={Game4} />
     </HomeStack.Navigator>
   );
 }
@@ -58,8 +58,8 @@ export default function Navbar() {
               iconName = 'trophy';
             // } else if (route.name === 'Leaderboard') {
             //   iconName = 'shield';
-            // } else if (route.name === 'Dictionary') {
-            //   iconName = 'book';
+            } else if (route.name === 'Dictionary') {
+              iconName = 'search';
             } else if (route.name === 'Settings') {
               iconName = 'settings';
             }
@@ -74,8 +74,8 @@ export default function Navbar() {
       >
         <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }} />
         <Tab.Screen name="Compete" component={Compete} options={{ headerShown: false }} />
-        {/* <Tab.Screen name="Leaderboard" component={Leaderboard} options={{ headerShown: false }} />
-        <Tab.Screen name="Dictionary" component={Dictionary} options={{ headerShown: false }} /> */}
+        {/* <Tab.Screen name="Leaderboard" component={Leaderboard} options={{ headerShown: false }} /> */}
+        <Tab.Screen name="Dictionary" component={Dictionary} options={{ headerShown: false }} /> 
         <Tab.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
