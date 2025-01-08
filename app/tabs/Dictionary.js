@@ -1,27 +1,25 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faChevronLeft, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faStar, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Dictionary = React.memo(() => {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.iconButton}>
-            <FontAwesomeIcon icon={faChevronLeft} size={24} color="#4B4B4B" />
-          </TouchableOpacity>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>  
         
-        <TextInput
-          placeholder="Search bar"
-          style={styles.searchInput}
-        />
+        <View style={styles.searchContainer}>
+          <FontAwesomeIcon icon={faSearch} size={18} color="#4B4B4B" style={styles.searchIcon} />
+          <TextInput
+            placeholder="Search bar"
+            style={styles.searchInput}
+          />
+        </View>
         
         <View style={styles.categoryButtonsContainer}>
           {['All', 'Noun', 'Verb', 'Adj', 'Adv'].map((label, index) => (
             <TouchableOpacity key={index} style={styles.categoryButton}>
-              <Text>{label}</Text>
+              <Text style={{fontSize: 11, fontWeight: 600}}>{label}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity style={styles.categoryButton}>
@@ -30,13 +28,25 @@ const Dictionary = React.memo(() => {
         </View>
         
         <View style={styles.wordList}>
-          {['apple (táo)', 'strong (mạnh)', 'apple (táo)', 'apple (táo)', 'apple (táo)'].map((word, index) => (
+          {[
+            { word: 'apple (táo)', pos: 'noun' },
+            { word: 'strong (mạnh)', pos: 'adjective' },
+            { word: 'run (chạy)', pos: 'verb' },
+            { word: 'book (sách)', pos: 'noun' },
+            { word: 'fast (nhanh)', pos: 'adjective' },
+            { word: 'beautiful (đẹp)', pos: 'adjective' },
+            { word: 'dog (chó)', pos: 'noun' },
+            { word: 'cat (mèo)', pos: 'noun' },
+            { word: 'car (ô tô)', pos: 'noun' },
+            { word: 'happy (hạnh phúc)', pos: 'adjective' }
+          ].map((item, index) => (
             <View key={index} style={styles.wordItem}>
-              <Text>{word}</Text>
-              {index !== 1 && <Text style={styles.wordType}>noun</Text>}
+              <Text>{item.word}</Text>
+              <Text style={styles.wordType}>{item.pos}</Text>
             </View>
           ))}
         </View>
+
       </ScrollView>
     </View>
   );
@@ -54,21 +64,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  header: {
+  searchContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 16,
-  },
-  iconButton: {
-    padding: 8,
-  },
-  searchInput: {
+    alignItems: 'center',
     width: '100%',
     padding: 12,
     backgroundColor: '#F1F1F1',
     borderRadius: 8,
-    marginBottom: 16,
+    marginVertical: 16,
+    marginTop: 20,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
   },
   categoryButtonsContainer: {
     flexDirection: 'row',
@@ -78,8 +88,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   categoryButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    width: 50,
+    height: 40,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     backgroundColor: '#F1F1F1',
     borderRadius: 8,
     margin: 4,
@@ -93,6 +105,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#F1F1F1',
+    width: '100%',
+    height: 73,
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
