@@ -6,12 +6,16 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import Settings from '../tabs/Settings';
 import Compete from '../tabs/Compete';
 import Dictionary from '../tabs/Dictionary';
-// import Leaderboard from '../tabs/Leaderboard';
 import Main from '../tabs/Main';
 import Message from '../tabs/Message';
 import UserProfile from '../components/userProfile';
-import Slide from '../games/Slide';
+import Slide from '../games/Slide'; // Assuming all slides are the same component
 import Game from '../games/Game';
+import data from '../data/data'; // Import data
+
+// Dynamically generate slide names based on the length of texts in data.
+const totalSlides = data.length; // Define the number of slides based on data length
+const slideNames = Array.from({ length: totalSlides }, (_, index) => `Slide${index + 1}`);
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -25,10 +29,14 @@ function HomeStackScreen() {
     >
       <HomeStack.Screen name="Main" component={Main} options={{ headerTitle: () => <UserProfile /> }} />
       <HomeStack.Screen name="Message" component={Message} />
-      <HomeStack.Screen name="Slide1" component={Slide} />
-      <HomeStack.Screen name="Slide2" component={Slide} />
-      <HomeStack.Screen name="Slide3" component={Slide} />
-      <HomeStack.Screen name="Slide4" component={Slide} />
+      {slideNames.map((slideName) => (
+        <HomeStack.Screen
+          key={slideName}
+          name={slideName}
+          component={Slide} // All slides can use the same component
+          options={{ title: slideName }}
+        />
+      ))}
       <HomeStack.Screen name="Game" component={Game} />
     </HomeStack.Navigator>
   );
@@ -47,8 +55,6 @@ export default function Navbar() {
               iconName = 'home';
             } else if (route.name === 'Compete') {
               iconName = 'trophy';
-            // } else if (route.name === 'Leaderboard') {
-            //   iconName = 'shield';
             } else if (route.name === 'Dictionary') {
               iconName = 'search';
             } else if (route.name === 'Settings') {
@@ -65,7 +71,6 @@ export default function Navbar() {
       >
         <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }} />
         <Tab.Screen name="Compete" component={Compete} options={{ headerShown: false }} />
-        {/* <Tab.Screen name="Leaderboard" component={Leaderboard} options={{ headerShown: false }} /> */}
         <Tab.Screen name="Dictionary" component={Dictionary} options={{ headerShown: false }} /> 
         <Tab.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
       </Tab.Navigator>

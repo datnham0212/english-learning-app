@@ -4,15 +4,9 @@ import { View, Text, StyleSheet, FlatList, Dimensions, Pressable, ImageBackgroun
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import Pagination from '../components/pagination';
+import data from '../data/data';
 
 const { width } = Dimensions.get('window');
-
-const data = [
-  { key: '1', text: 'A', backgroundImage: require('../assets/sample.jpg') },
-  { key: '2', text: 'B', backgroundImage: require('../assets/sample.jpg') },
-  { key: '3', text: 'C', backgroundImage: require('../assets/sample.jpg') },
-  { key: '4', text: 'D', backgroundImage: require('../assets/sample.jpg') },
-];
 
 const renderItem = ({ item, onPress }) => (
   <Pressable style={[styles.slide, styles.shadow]} onPress={onPress}>
