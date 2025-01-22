@@ -8,10 +8,10 @@ import Pagination from '../components/pagination';
 const { width } = Dimensions.get('window');
 
 const data = [
-  { key: '1', text: 'Slide 1', backgroundImage: require('../assets/sample.jpg') },
-  { key: '2', text: 'Slide 2', backgroundImage: require('../assets/sample.jpg') },
-  { key: '3', text: 'Slide 3', backgroundImage: require('../assets/sample.jpg') },
-  { key: '4', text: 'Slide 4', backgroundImage: require('../assets/sample.jpg') },
+  { key: '1', text: 'A', backgroundImage: require('../assets/sample.jpg') },
+  { key: '2', text: 'B', backgroundImage: require('../assets/sample.jpg') },
+  { key: '3', text: 'C', backgroundImage: require('../assets/sample.jpg') },
+  { key: '4', text: 'D', backgroundImage: require('../assets/sample.jpg') },
 ];
 
 const renderItem = ({ item, onPress }) => (

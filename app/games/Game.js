@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Game3 = React.memo(() => {
+const Game = React.memo(() => {
   return (
     <View style={styles.container}>
       <Text>First game!</Text>
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Game3;
+export default Game;
