@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Pressable, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
+import UnscrambleWordsGame from '../components/Unscramble words based on pictures';
 
 const { width } = Dimensions.get('window');
 
@@ -11,7 +12,7 @@ const Main = React.memo(() => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-
+      <UnscrambleWordsGame />
     </View>
   );
 });
