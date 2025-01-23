@@ -41,10 +41,6 @@ const Settings = React.memo(() => {
           />
         </View>
 
-        {/* <View style={styles.option}>
-          <Text style={styles.optionName}>Difficulty</Text>
-        </View> */}
-
         <View style={styles.option}>
           <Text style={styles.optionName}>Dark Mode</Text>
           <View>

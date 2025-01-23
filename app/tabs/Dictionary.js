@@ -55,7 +55,6 @@ const Dictionary = React.memo(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF9C4',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 16,
     marginTop: 20,
+    borderWidth: 0.2,
   },
   searchIcon: {
     marginRight: 8,
@@ -88,15 +88,16 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   categoryButton: {
-    width: 50,
-    height: 40,
+    width: 51,
+    height: 29,
     paddingVertical: 6,
     paddingHorizontal: 12,
     backgroundColor: '#F1F1F1',
     borderRadius: 8,
-    margin: 4,
+    margin: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 0.2,
   },
   wordList: {
     width: '100%',
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     alignItems: 'center',
+    borderWidth: 0.2,
   },
   wordType: {
     color: '#B0B0B0',
