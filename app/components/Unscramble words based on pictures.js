@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -15,10 +15,10 @@ const shuffleArray = (array) => {
 
 const UnscrambleWordsGame = () => {
   const [currentWord, setCurrentWord] = useState('');
-  const [scrambledWord, setScrambledWord] = useState('');
-  const [userInput, setUserInput] = useState('');
+  const [scrambledLetters, setScrambledLetters] = useState([]);
   const [score, setScore] = useState(0);
   const [currentImage, setCurrentImage] = useState(null);
+  const [selectedLetters, setSelectedLetters] = useState([]);
 
   const words = [
     { word: 'APPLE', image: require('../assets/apple.jpg') },
@@ -28,33 +28,42 @@ const UnscrambleWordsGame = () => {
     { word: 'MANGO', image: require('../assets/mango.jpg') }
   ];
 
-  const scrambleWord = (word) => {
-    const shuffled = shuffleArray(word.split('')).join('');
-    return shuffled === word ? scrambleWord(word) : shuffled;
-  };
-
   const loadNewWord = () => {
     const randomIndex = Math.floor(Math.random() * words.length);
     const selectedWord = words[randomIndex];
     setCurrentWord(selectedWord.word);
-    setScrambledWord(scrambleWord(selectedWord.word));
+    const letters = selectedWord.word.split('').map((letter, index) => ({
+      key: `${index}`,
+      letter,
+    }));
+    setScrambledLetters(shuffleArray([...letters]));
+    setSelectedLetters([]);
     setCurrentImage(selectedWord.image);
-    setUserInput('');
   };
 
   useEffect(() => {
     loadNewWord();
   }, []);
 
-  const handleSubmit = () => {
-    if (userInput.toUpperCase() === currentWord) {
+  const handleLetterPress = (letter, index) => {
+    setSelectedLetters([...selectedLetters, { ...letter, originalIndex: index }]);
+    setScrambledLetters(scrambledLetters.filter((_, i) => i !== index));
+  };
+
+  const handleSelectedLetterPress = (letter, index) => {
+    setScrambledLetters([...scrambledLetters, letter]);
+    setSelectedLetters(selectedLetters.filter((_, i) => i !== index));
+  };
+
+  const checkAnswer = () => {
+    const userAnswer = selectedLetters.map(item => item.letter).join('');
+    if (userAnswer === currentWord) {
       setScore(score + 1);
       Alert.alert('Correct!', 'You unscrambled the word!');
       loadNewWord();
     } else {
-      Alert.alert('Wrong!', 'Try again!');
+      Alert.alert('Wrong!', 'Try rearranging the letters!');
     }
-    setUserInput('');
   };
 
   return (
@@ -66,18 +75,32 @@ const UnscrambleWordsGame = () => {
         <Image source={currentImage} style={styles.image} />
       )}
       
-      <Text style={styles.scrambledWord}>{scrambledWord}</Text>
+      <View style={styles.answerContainer}>
+        {selectedLetters.map((letter, index) => (
+          <TouchableOpacity
+            key={`selected-${letter.key}`}
+            style={styles.letterBox}
+            onPress={() => handleSelectedLetterPress(letter, index)}
+          >
+            <Text style={styles.letterText}>{letter.letter}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={styles.lettersContainer}>
+        {scrambledLetters.map((letter, index) => (
+          <TouchableOpacity
+            key={`scrambled-${letter.key}`}
+            style={styles.letterBox}
+            onPress={() => handleLetterPress(letter, index)}
+          >
+            <Text style={styles.letterText}>{letter.letter}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       
-      <TextInput
-        style={styles.input}
-        value={userInput}
-        onChangeText={setUserInput}
-        placeholder="Enter your answer"
-        autoCapitalize="characters"
-      />
-      
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
+      <TouchableOpacity style={styles.button} onPress={checkAnswer}>
+        <Text style={styles.buttonText}>Check Answer</Text>
       </TouchableOpacity>
     </View>
   );
@@ -106,21 +129,43 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginBottom: 20,
   },
-  scrambledWord: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  answerContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginBottom: 15,
+    padding: 8,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    width: '90%',
   },
-  input: {
-    width: '80%',
-    height: 50,
+  lettersContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 15,
+    width: '90%',
+  },
+  letterBox: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    margin: 4,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 10,
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+  },
+  letterText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#007AFF',
