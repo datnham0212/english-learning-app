@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, Animated, StyleSheet, PanResponder } from 'react-native';
 
 // Shuffle function remains the same
 const shuffleArray = (array) => {
@@ -49,13 +49,22 @@ const UnscrambleWordsGame = () => {
   }, []);
 
   const handleLetterPress = (letter, index) => {
-    setSelectedLetters([...selectedLetters, { ...letter, originalIndex: index }]);
-    setScrambledLetters(scrambledLetters.filter((_, i) => i !== index));
+    setSelectedLetters((prev) => [...prev, letter]);
+    setScrambledLetters((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSelectedLetterPress = (letter, index) => {
-    setScrambledLetters([...scrambledLetters, letter]);
-    setSelectedLetters(selectedLetters.filter((_, i) => i !== index));
+  const handleDrag = (index, panResponder) => {
+    return panResponder.panHandlers;
+  };
+
+  const handleDrop = (index, gestureState, fromScrambled = true) => {
+    if (fromScrambled) {
+      setSelectedLetters((prev) => [...prev, scrambledLetters[index]]);
+      setScrambledLetters((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setScrambledLetters((prev) => [...prev, selectedLetters[index]]);
+      setSelectedLetters((prev) => prev.filter((_, i) => i !== index));
+    }
   };
 
   useEffect(() => {
@@ -82,9 +91,8 @@ const UnscrambleWordsGame = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Unscramble the Word!</Text>
       <Text style={styles.score}>Score: {score}</Text>
-      
+
       {currentImage && (
         <Image source={currentImage} style={styles.image} />
       )}
@@ -93,28 +101,62 @@ const UnscrambleWordsGame = () => {
         <Text style={styles.feedback}>{feedbackMessage}</Text>
       )}
 
-      <View style={[styles.answerContainer, {width: currentWord.length * 65, height: 75}]}>
-        {selectedLetters.map((letter, index) => (
-          <TouchableOpacity
-            key={`selected-${letter.key}`}
-            style={styles.letterBoxSelected}
-            onPress={() => handleSelectedLetterPress(letter, index)}
-          >
-            <Text style={styles.letterText}>{letter.letter}</Text>
-          </TouchableOpacity>
-        ))}
+      {/* Display selected letters (Answer Box) */}
+      <View style={[styles.answerContainer, { width: currentWord.length * 65, height: 75 }]}>
+        {selectedLetters.map((letter, index) => {
+          const position = new Animated.ValueXY();
+
+          const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderMove: (e, gestureState) => {
+              position.setValue({ x: gestureState.dx, y: gestureState.dy });
+            },
+            onPanResponderRelease: (e, gestureState) => {
+              handleDrop(index, gestureState, false); // Handle drag out of the answer container
+              position.setValue({ x: 0, y: 0 }); // Reset position after release
+            },
+          });
+
+          return (
+            <Animated.View
+              key={`selected-${letter.key}`}
+              style={[styles.letterBoxSelected, { transform: position.getTranslateTransform() }]}
+              {...panResponder.panHandlers}
+            >
+              <Text style={styles.letterText}>{letter.letter}</Text>
+            </Animated.View>
+          );
+        })}
       </View>
 
+      {/* Display scrambled letters */}
       <View style={styles.lettersContainer}>
-        {scrambledLetters.map((letter, index) => (
-          <TouchableOpacity
-            key={`scrambled-${letter.key}`}
-            style={styles.letterBox}
-            onPress={() => handleLetterPress(letter, index)}
-          >
-            <Text style={styles.letterText}>{letter.letter}</Text>
-          </TouchableOpacity>
-        ))}
+        {scrambledLetters.map((letter, index) => {
+          const position = new Animated.ValueXY();
+
+          const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderMove: (e, gestureState) => {
+              position.setValue({ x: gestureState.dx, y: gestureState.dy });
+            },
+            onPanResponderRelease: (e, gestureState) => {
+              handleDrop(index, gestureState); // Handle dragging into the answer box
+              position.setValue({ x: 0, y: 0 }); // Reset position after release
+            },
+          });
+
+          return (
+            <Animated.View
+              key={`scrambled-${letter.key}`}
+              style={[styles.letterBox, { transform: position.getTranslateTransform() }]}
+              {...panResponder.panHandlers}
+            >
+              <Text style={styles.letterText}>{letter.letter}</Text>
+            </Animated.View>
+          );
+        })}
       </View>
     </View>
   );
@@ -130,13 +172,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fffbf1', // Light background
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
-    fontFamily: 'Arial',
-  },
   score: {
     fontSize: 20,
     marginBottom: 20,
@@ -149,8 +184,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 360,
+    height: 300,
     resizeMode: 'contain',
     marginBottom: 20,
     borderRadius: 15,
@@ -217,4 +252,3 @@ const styles = StyleSheet.create({
 });
 
 export default UnscrambleWordsGame;
-
