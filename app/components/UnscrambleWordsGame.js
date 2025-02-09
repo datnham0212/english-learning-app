@@ -17,7 +17,7 @@ const shuffleArray = (array) => {
 const UnscrambleWordsGame = () => {
   const [currentWord, setCurrentWord] = useState('');
   const [scrambledLetters, setScrambledLetters] = useState([]);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(-1);
   const [currentImage, setCurrentImage] = useState(null);
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState('');

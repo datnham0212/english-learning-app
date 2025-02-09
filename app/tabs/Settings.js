@@ -1,46 +1,37 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Slider } from 'react-native-awesome-slider';
 import { Switch } from 'react-native-switch';
-import { useSharedValue } from 'react-native-reanimated';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Slider from '@react-native-community/slider';
 
 const { width } = Dimensions.get('window');
 
 const Settings = React.memo(() => {
   const [checked, setChecked] = useState('en');
   const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
-
-  const progress = useSharedValue(30);
-  const min = useSharedValue(0);
-  const max = useSharedValue(100);
+  const [volume, setVolume] = useState(0.5); // Volume state (range 0 - 1)
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
+        
+        {/* Volume Control */}
         <View style={styles.option}>
           <Text style={styles.optionName}>Volume</Text>
-          <Slider 
-            progress={progress}
-            minimumValue={min} 
-            maximumValue={max} 
-            sliderHeight={20}
-            renderThumb={() => <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#fff' }} />}
-            snapThreshold={5}
-            style={{
-              borderRadius: 10,
-              borderColor: 'transparent',
-              overflow: 'hidden',
-            }}
-            theme={{
-              minimumTrackTintColor: 'dodgerblue',
-              maximumTrackTintColor: '#DEDEDE',
-              bubbleBackgroundColor: 'dodgerblue',
-            }}
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={1}
+            value={volume}
+            onSlidingComplete={(val) => setVolume(val)} // Update on sliding complete
+            minimumTrackTintColor="dodgerblue"
+            maximumTrackTintColor="gray"
+            thumbTintColor="dodgerblue"
           />
         </View>
 
+        {/* Dark Mode */}
         <View style={styles.option}>
           <Text style={styles.optionName}>Dark Mode</Text>
           <View>
@@ -63,12 +54,13 @@ const Settings = React.memo(() => {
               renderInActiveText={false}
               switchLeftPx={2}
               switchRightPx={2}
-              switchWidthMultiplier={2}
+              switchWidthMultiplier={2.01}
               switchBorderRadius={30}
             />
           </View>
         </View>
 
+        {/* Language Selection */}
         <View style={styles.option}>
           <Text style={styles.optionName}>Language</Text>
           <View style={styles.radioButtonContainer}>
@@ -127,6 +119,10 @@ const styles = StyleSheet.create({
   selectedFlag: {
     borderWidth: 3,
     borderColor: 'dodgerblue',
+  },
+  slider: {
+    width: 250, 
+    height: 40,
   },
 });
 
