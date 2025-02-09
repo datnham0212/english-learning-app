@@ -11,7 +11,10 @@ const Main = React.memo(() => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <TouchableOpacity style={styles.mode_selection} onPress={() => navigation.navigate('Settings')}>
+      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('UnscrambleWordsGame')}>
+        <Text style={styles.mode_name}>Start</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'grey' }]} onPress={() => navigation.navigate('Settings')}>
         <Text style={styles.mode_name}>Settings</Text>
       </TouchableOpacity>
 
@@ -28,10 +31,10 @@ const styles = StyleSheet.create({
   mode_selection: {
     width: width * 0.8,
     height: width * 0.3,
-    backgroundColor: '#32ba64',
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 15,
   },
   mode_name: {
     fontSize: 25,

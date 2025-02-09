@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Animated, StyleSheet, PanResponder } from 'react-native';
 
-// Shuffle function remains the same
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
   while (0 !== currentIndex) {
@@ -17,7 +16,7 @@ const shuffleArray = (array) => {
 const UnscrambleWordsGame = () => {
   const [currentWord, setCurrentWord] = useState('');
   const [scrambledLetters, setScrambledLetters] = useState([]);
-  const [score, setScore] = useState(-1);
+  const [score, setScore] = useState(0);
   const [currentImage, setCurrentImage] = useState(null);
   const [selectedLetters, setSelectedLetters] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState('');
@@ -41,7 +40,7 @@ const UnscrambleWordsGame = () => {
     setScrambledLetters(shuffleArray([...letters]));
     setSelectedLetters([]);
     setCurrentImage(selectedWord.image);
-    setFeedbackMessage(''); // Clear feedback message
+    setFeedbackMessage('');
   };
 
   useEffect(() => {
@@ -68,24 +67,26 @@ const UnscrambleWordsGame = () => {
   };
 
   useEffect(() => {
+    if (selectedLetters.length === 0) return;
+    
     const userAnswer = selectedLetters.map(item => item.letter).join('');
     if (userAnswer === currentWord) {
-      setScore(prevScore => prevScore + 1); // Increment score by 1
+      setScore(prevScore => prevScore + 1);
       setFeedbackMessage('Correct! You unscrambled the word!');
       setTimeout(() => {
-        setFeedbackMessage(''); // Clear feedback after 0.5 seconds
-        loadNewWord(); // Load new word after feedback disappears
+        setFeedbackMessage('');
+        loadNewWord();
       }, 500);
     } else if (selectedLetters.length === currentWord.length) {
       setFeedbackMessage('Wrong! Try again.');
       setTimeout(() => {
-        setFeedbackMessage(''); // Clear feedback after 0.5 seconds
-        setSelectedLetters([]); // Reset selected letters
+        setFeedbackMessage('');
+        setSelectedLetters([]);
         setScrambledLetters(shuffleArray(currentWord.split('').map((letter, index) => ({
           key: `${index}`,
           letter,
-        })))); // Shuffle letters for the next attempt
-      }, 500); // Delay before resetting
+        }))));
+      }, 500);
     }
   }, [selectedLetters, currentWord]);
 
@@ -101,7 +102,6 @@ const UnscrambleWordsGame = () => {
         <Text style={styles.feedback}>{feedbackMessage}</Text>
       )}
 
-      {/* Display selected letters (Answer Box) */}
       <View style={[styles.answerContainer, { width: currentWord.length * 65, height: 75 }]}>
         {selectedLetters.map((letter, index) => {
           const position = new Animated.ValueXY();
@@ -113,8 +113,8 @@ const UnscrambleWordsGame = () => {
               position.setValue({ x: gestureState.dx, y: gestureState.dy });
             },
             onPanResponderRelease: (e, gestureState) => {
-              handleDrop(index, gestureState, false); // Handle drag out of the answer container
-              position.setValue({ x: 0, y: 0 }); // Reset position after release
+              handleDrop(index, gestureState, false);
+              position.setValue({ x: 0, y: 0 });
             },
           });
 
@@ -130,7 +130,6 @@ const UnscrambleWordsGame = () => {
         })}
       </View>
 
-      {/* Display scrambled letters */}
       <View style={styles.lettersContainer}>
         {scrambledLetters.map((letter, index) => {
           const position = new Animated.ValueXY();
@@ -142,8 +141,8 @@ const UnscrambleWordsGame = () => {
               position.setValue({ x: gestureState.dx, y: gestureState.dy });
             },
             onPanResponderRelease: (e, gestureState) => {
-              handleDrop(index, gestureState); // Handle dragging into the answer box
-              position.setValue({ x: 0, y: 0 }); // Reset position after release
+              handleDrop(index, gestureState);
+              position.setValue({ x: 0, y: 0 });
             },
           });
 
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     width: '100%',
-    backgroundColor: '#fffbf1', // Light background
+    backgroundColor: '#fffbf1',
   },
   score: {
     fontSize: 20,
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
   feedback: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#d9534f', // Red color for wrong answer feedback
+    color: '#d9534f',
     marginBottom: 20,
   },
   image: {
@@ -194,8 +193,8 @@ const styles = StyleSheet.create({
   },
   answerContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start', // Align letters to the left
-    flexWrap: 'nowrap', // Prevent wrapping here
+    justifyContent: 'flex-start',
+    flexWrap: 'nowrap',
     marginBottom: 20,
     paddingHorizontal: 8,
     backgroundColor: '#e0e0e0',
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   letterBox: {
-    flexBasis: '18%', // 5 letters per row, adjust accordingly for more space
+    flexBasis: '18%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -222,15 +221,10 @@ const styles = StyleSheet.create({
     margin: 6,
     borderWidth: 2,
     borderColor: '#ccc',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   letterBoxSelected: {
-    width: 50, // Fixed width for square box
-    height: 50, // Fixed height for square box
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#a5d8ff',
@@ -238,11 +232,6 @@ const styles = StyleSheet.create({
     margin: 6,
     borderWidth: 2,
     borderColor: '#ccc',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   letterText: {
     fontSize: 22,
