@@ -110,16 +110,19 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   optionsContainer: {
-    width: '90%',
+    width: '100%',
     marginTop: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   optionButton: {
     backgroundColor: '#a5d8ff',
-    padding: 15,
-    marginVertical: 10,
+    padding: 20,
+    marginVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
-    width: '100%',
+    width: '48%',
   },
   optionText: {
     fontSize: 18,

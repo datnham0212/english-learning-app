@@ -11,10 +11,7 @@ const Main = React.memo(() => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('UnscrambleWordsGame')}>
-        <Text style={styles.mode_name}>Start</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('MultipleChoiceGame')}>
+      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('Game')}>
         <Text style={styles.mode_name}>Start</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'grey' }]} onPress={() => navigation.navigate('Settings')}>
