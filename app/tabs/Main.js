@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const Main = React.memo(() => {
   const navigation = useNavigation();
@@ -17,7 +17,6 @@ const Main = React.memo(() => {
       <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'grey' }]} onPress={() => navigation.navigate('Settings')}>
         <Text style={styles.mode_name}>Settings</Text>
       </TouchableOpacity>
-
     </View>
   );
 });
@@ -27,6 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: height * 0.3,
   },
   mode_selection: {
     width: width * 0.8,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 15,
+    marginVertical: 20,
   },
   mode_name: {
     fontSize: 25,

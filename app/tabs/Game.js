@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 
 const Game = () => {
     const navigation = useNavigation();
@@ -24,7 +25,7 @@ const Game = () => {
             <View style={styles.row}>
                 <TouchableOpacity 
                     style={styles.button} 
-                    onPress={() => navigation.navigate('Component3')}
+                    onPress={() => navigation.navigate('MatchingGame')}
                 >
                     <Text style={styles.buttonText}>Component 3</Text>
                 </TouchableOpacity>
@@ -39,6 +40,8 @@ const Game = () => {
     );
 };
 
+const { width, height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -51,12 +54,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button: {
-        flex: 1,
+        width: width * 0.4,
+        height: height * 0.3,
         margin: 10,
-        padding: 20,
         backgroundColor: '#ddd',
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 20,
     },
     buttonText: {
         fontSize: 18,
