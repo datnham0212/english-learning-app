@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, PanResponder } from 'react-native';
 
-// Sample English and Vietnamese pairs
 const wordPairs = [
   { english: 'Hello', vietnamese: 'Xin chào' },
   { english: 'Goodbye', vietnamese: 'Tạm biệt' },
@@ -10,81 +9,75 @@ const wordPairs = [
   { english: 'Sorry', vietnamese: 'Xin lỗi' },
 ];
 
-// Function to shuffle an array
-const shuffleArray = (array) => {
-  return [...array].sort(() => 0.5 - Math.random());
-};
+const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
 
-// Function to get 3 random pairs from the wordPairs
-const getRandomPairs = (pairs, numPairs) => {
-  const shuffled = [...pairs].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, numPairs);
-};
+const getRandomPairs = (pairs, numPairs) => shuffleArray(pairs).slice(0, numPairs);
 
 const MatchingGame = () => {
-  const [selectedEnglish, setSelectedEnglish] = React.useState(null);
-  const [selectedVietnamese, setSelectedVietnamese] = React.useState(null);
-  const [currentPairs, setCurrentPairs] = React.useState([]);
-  const [shuffledEnglish, setShuffledEnglish] = React.useState([]);
-  const [shuffledVietnamese, setShuffledVietnamese] = React.useState([]);
-  const [score, setScore] = React.useState(0); // Add a score state
+  const [currentPairs, setCurrentPairs] = useState([]);
+  const [shuffledEnglish, setShuffledEnglish] = useState([]);
+  const [shuffledVietnamese, setShuffledVietnamese] = useState([]);
+  const [matchedPairs, setMatchedPairs] = useState([]);
+  const [selectedPair, setSelectedPair] = useState({ english: null, vietnamese: null });
+  const [score, setScore] = useState(0);
 
-  // Function to start a new round and shuffle the words
-  const startNewRound = () => {
-    const pairs = getRandomPairs(wordPairs, 3); // Get 3 random pairs
-    setCurrentPairs(pairs); // Store the selected pairs
-    setShuffledEnglish(shuffleArray(pairs.map((pair) => pair.english))); // Shuffle English words
-    setShuffledVietnamese(shuffleArray(pairs.map((pair) => pair.vietnamese))); // Shuffle Vietnamese words
-  };
-
-  React.useEffect(() => {
-    startNewRound(); // Start the game by shuffling words on the first load
+  useEffect(() => {
+    startNewRound();
   }, []);
 
-  // Function to handle selection of English or Vietnamese word
-  const handleEnglishSelect = (english) => {
-    setSelectedEnglish(english);
+  const startNewRound = () => {
+    const pairs = getRandomPairs(wordPairs, 3);
+    setCurrentPairs(pairs);
+    setShuffledEnglish(shuffleArray(pairs.map(pair => pair.english)));
+    setShuffledVietnamese(shuffleArray(pairs.map(pair => pair.vietnamese)));
+    setMatchedPairs([]);
+    setSelectedPair({ english: null, vietnamese: null });
   };
 
-  const handleVietnameseSelect = (vietnamese) => {
-    setSelectedVietnamese(vietnamese);
-  };
+  const handleSelect = (word, language) => {
+    const newPair = { ...selectedPair, [language]: word };
+    setSelectedPair(newPair);
 
-  // Function to check the match and update the score
-  const checkMatch = () => {
-    if (selectedEnglish && selectedVietnamese) {
-      const match = currentPairs.find(
-        (pair) =>
-          pair.english === selectedEnglish && pair.vietnamese === selectedVietnamese
-      );
-      if (match) {
-        setScore(score + 1); // Increment score on correct match
-        Alert.alert('Correct!', 'You have matched correctly.');
-        // Reset selection and start a new round
-        setSelectedEnglish(null);
-        setSelectedVietnamese(null);
-        startNewRound(); // Shuffle for the next round
-      } else {
-        Alert.alert('Incorrect', 'Try again!');
-        // Reset selection but do not shuffle
-        setSelectedEnglish(null);
-        setSelectedVietnamese(null);
-      }
+    if (newPair.english && newPair.vietnamese) {
+      checkMatch(newPair);
     }
+  };
+
+  const checkMatch = (pair) => {
+    const match = currentPairs.find(
+      p => p.english === pair.english && p.vietnamese === pair.vietnamese
+    );
+
+    if (match && !matchedPairs.some(m => m.english === match.english)) {
+      setMatchedPairs(prev => [...prev, match]);
+      Alert.alert('Correct!', 'You have matched correctly.');
+
+      if (matchedPairs.length + 1 === currentPairs.length) {
+        setScore(prev => prev + 1);
+        Alert.alert('Round Complete!', 'All pairs matched correctly. Starting a new round.');
+        startNewRound();
+      }
+    } else {
+      Alert.alert('Incorrect', 'Try again!');
+    }
+
+    setSelectedPair({ english: null, vietnamese: null });
   };
 
   return (
     <View style={styles.container}>
-      {/* Display score */}
       <Text style={styles.scoreText}>Score: {score}</Text>
-
       <View style={styles.rowContainer}>
         <View style={styles.column}>
           {shuffledEnglish.map((word, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.button}
-              onPress={() => handleEnglishSelect(word)}>
+              style={
+                matchedPairs.some(pair => pair.english === word)
+                  ? styles.matchedButton
+                  : styles.button
+              }
+              onPress={() => handleSelect(word, 'english')}>
               <Text style={styles.buttonText}>{word}</Text>
             </TouchableOpacity>
           ))}
@@ -94,17 +87,17 @@ const MatchingGame = () => {
           {shuffledVietnamese.map((word, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.button}
-              onPress={() => handleVietnameseSelect(word)}>
+              style={
+                matchedPairs.some(pair => pair.vietnamese === word)
+                  ? styles.matchedButton
+                  : styles.button
+              }
+              onPress={() => handleSelect(word, 'vietnamese')}>
               <Text style={styles.buttonText}>{word}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </View>
-
-      <TouchableOpacity style={styles.checkButton} onPress={checkMatch}>
-        <Text style={styles.checkButtonText}>Check Match</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -142,18 +135,20 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     margin: 5,
   },
+  matchedButton: {
+    width: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d4edda',
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 2,
+    borderColor: '#28a745',
+    margin: 5,
+  },
   buttonText: {
     color: '#000',
     fontSize: 16,
-  },
-  checkButton: {
-    backgroundColor: '#008CBA',
-    padding: 10,
-    borderRadius: 5,
-  },
-  checkButtonText: {
-    color: '#fff',
-    fontSize: 18,
   },
 });
 
