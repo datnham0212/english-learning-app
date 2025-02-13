@@ -118,13 +118,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: '#4CAF50',
+    flexBasis: '10%',
+    width: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 12,
     padding: 10,
+    borderWidth: 2,
+    borderColor: '#ccc',
     margin: 5,
-    borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 16,
   },
   checkButton: {
