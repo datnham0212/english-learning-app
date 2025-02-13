@@ -60,14 +60,16 @@ const MatchingGame = () => {
       if (match) {
         setScore(score + 1); // Increment score on correct match
         Alert.alert('Correct!', 'You have matched correctly.');
+        // Reset selection and start a new round
+        setSelectedEnglish(null);
+        setSelectedVietnamese(null);
+        startNewRound(); // Shuffle for the next round
       } else {
-        setScore(score - 1); // Decrease score on incorrect match
         Alert.alert('Incorrect', 'Try again!');
+        // Reset selection but do not shuffle
+        setSelectedEnglish(null);
+        setSelectedVietnamese(null);
       }
-      // After checking the match, shuffle for the next round
-      setSelectedEnglish(null);
-      setSelectedVietnamese(null);
-      startNewRound(); // Shuffle for the next round
     }
   };
 
@@ -130,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    flexBasis: '10%',
     width: '70%',
     justifyContent: 'center',
     alignItems: 'center',
