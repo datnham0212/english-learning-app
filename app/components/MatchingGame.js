@@ -27,6 +27,7 @@ const MatchingGame = () => {
   const [currentPairs, setCurrentPairs] = React.useState([]);
   const [shuffledEnglish, setShuffledEnglish] = React.useState([]);
   const [shuffledVietnamese, setShuffledVietnamese] = React.useState([]);
+  const [score, setScore] = React.useState(0); // Add a score state
 
   // Function to start a new round and shuffle the words
   const startNewRound = () => {
@@ -49,6 +50,7 @@ const MatchingGame = () => {
     setSelectedVietnamese(vietnamese);
   };
 
+  // Function to check the match and update the score
   const checkMatch = () => {
     if (selectedEnglish && selectedVietnamese) {
       const match = currentPairs.find(
@@ -56,8 +58,10 @@ const MatchingGame = () => {
           pair.english === selectedEnglish && pair.vietnamese === selectedVietnamese
       );
       if (match) {
+        setScore(score + 1); // Increment score on correct match
         Alert.alert('Correct!', 'You have matched correctly.');
       } else {
+        setScore(score - 1); // Decrease score on incorrect match
         Alert.alert('Incorrect', 'Try again!');
       }
       // After checking the match, shuffle for the next round
@@ -69,6 +73,9 @@ const MatchingGame = () => {
 
   return (
     <View style={styles.container}>
+      {/* Display score */}
+      <Text style={styles.scoreText}>Score: {score}</Text>
+
       <View style={styles.rowContainer}>
         <View style={styles.column}>
           {shuffledEnglish.map((word, index) => (
@@ -106,6 +113,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+  },
+  scoreText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   rowContainer: {
     flexDirection: 'row',
