@@ -11,15 +11,15 @@ const Game = () => {
             <View style={styles.row}>
                 <TouchableOpacity 
                     style={styles.button} 
-                    onPress={() => navigation.navigate('UnscrambleWordsGame')}
+                    onPress={() => navigation.navigate('SentenceBuildingGame')}
                 >
-                    <Text style={styles.buttonText}>Component 1</Text>
+                    <Text style={styles.buttonText}>Sentences Builder</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.button} 
                     onPress={() => navigation.navigate('MultipleChoiceGame')}
                 >
-                    <Text style={styles.buttonText}>Component 2</Text>
+                    <Text style={styles.buttonText}>Identify Pictures</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>

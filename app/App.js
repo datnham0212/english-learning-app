@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Main from './tabs/Main';
 import UnscrambleWordsGame from './components/UnscrambleWordsGame';
 import MultipleChoiceGame from './components/MultipleChoiceGame';
+import SentenceBuildingGame from './components/SentenceBuildingGame';
 import MatchingGame from './components/MatchingGame';
 import Online from './tabs/Online';
 import Game from './tabs/Game';
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="Game" component={Game} />
         <Stack.Screen name="Online" component={Online} />
         <Stack.Screen name="UnscrambleWordsGame" component={UnscrambleWordsGame} />
+        <Stack.Screen name="SentenceBuildingGame" component={SentenceBuildingGame} />
         <Stack.Screen name="MultipleChoiceGame" component={MultipleChoiceGame} />
         <Stack.Screen name="MatchingGame" component={MatchingGame} />
         <Stack.Screen name="Settings" component={Settings} />

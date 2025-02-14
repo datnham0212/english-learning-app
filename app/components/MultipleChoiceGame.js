@@ -15,6 +15,8 @@ const MultipleChoiceGame = () => {
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // Track selected answer
+  const [isCorrect, setIsCorrect] = useState(null); // Track if the answer is correct
 
   const loadNewQuestion = () => {
     const randomIndex = Math.floor(Math.random() * words.length);
@@ -23,6 +25,8 @@ const MultipleChoiceGame = () => {
     setCurrentImage(selectedWord.image);
     setOptions(shuffleArray([...selectedWord.options]));
     setFeedbackMessage('');
+    setSelectedAnswer(null); // Reset selected answer
+    setIsCorrect(null); // Reset correctness state
   };
 
   const shuffleArray = (array) => {
@@ -37,14 +41,19 @@ const MultipleChoiceGame = () => {
     return array;
   };
 
-  const handleAnswerSelection = (selectedAnswer) => {
-    if (selectedAnswer === currentWord) {
+  const handleAnswerSelection = (selectedOption) => {
+    setSelectedAnswer(selectedOption); // Set the selected answer
+
+    if (selectedOption === currentWord) {
+      setIsCorrect(true); // Correct answer
       setScore(prevScore => prevScore + 1);
-      setFeedbackMessage('Correct! Well done.');
+      // setFeedbackMessage('Correct! Well done.');
     } else {
-      setFeedbackMessage('Wrong! Try again.');
+      setIsCorrect(false); // Incorrect answer
+      // setFeedbackMessage('Wrong! Try again.');
     }
 
+    // Reset highlights and load a new question after a delay
     setTimeout(() => {
       loadNewQuestion();
     }, 1000);
@@ -53,6 +62,19 @@ const MultipleChoiceGame = () => {
   useEffect(() => {
     loadNewQuestion();
   }, []);
+
+  // Function to determine the background color of an option
+  const getOptionBackgroundColor = (option) => {
+    if (selectedAnswer === null) return '#fff'; // Default white if no answer selected
+
+    if (option === currentWord) {
+      return '#4ECDC4'; // Correct answer (highlighted in green)
+    } else if (option === selectedAnswer && !isCorrect) {
+      return '#FF6B6B'; // Incorrect answer (highlighted in red)
+    } else {
+      return '#fff'; // Default white for other options
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -70,8 +92,9 @@ const MultipleChoiceGame = () => {
         {options.map((option, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.optionButton}
+            style={[styles.optionButton, { backgroundColor: getOptionBackgroundColor(option) }]}
             onPress={() => handleAnswerSelection(option)}
+            disabled={selectedAnswer !== null} // Disable buttons after an answer is selected
           >
             <Text style={styles.optionText}>{option}</Text>
           </TouchableOpacity>
@@ -117,15 +140,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   optionButton: {
-    backgroundColor: '#a5d8ff',
-    padding: 20,
-    marginVertical: 15,
-    borderRadius: 10,
+    padding: 25,
+    marginVertical: 10,
+    borderRadius: 15,
     alignItems: 'center',
+    justifyContent: 'center',
     width: '48%',
+    height: 100,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
