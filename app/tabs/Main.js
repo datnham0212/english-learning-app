@@ -14,6 +14,9 @@ const Main = React.memo(() => {
       <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('Game')}>
         <Text style={styles.mode_name}>Start</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: '#fa2a55' }]} onPress={() => navigation.navigate('Online')}>
+        <Text style={styles.mode_name}>Online Mode</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'grey' }]} onPress={() => navigation.navigate('Settings')}>
         <Text style={styles.mode_name}>Settings</Text>
       </TouchableOpacity>

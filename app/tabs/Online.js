@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Compete = React.memo(() => {
+const Online = React.memo(() => {
   return (
     <View style={styles.container}>
       <Text>This is the compete page!</Text>
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Compete;
+export default Online;
