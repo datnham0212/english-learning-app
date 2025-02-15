@@ -13,7 +13,7 @@ const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
 
 const getRandomPairs = (pairs, numPairs) => shuffleArray(pairs).slice(0, numPairs);
 
-const MatchingGame = () => {
+const OldMatchingGame = () => {
   const [currentPairs, setCurrentPairs] = useState([]);
   const [shuffledEnglish, setShuffledEnglish] = useState([]);
   const [shuffledVietnamese, setShuffledVietnamese] = useState([]);
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MatchingGame;
+export default OldMatchingGame;

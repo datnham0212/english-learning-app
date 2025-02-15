@@ -25,9 +25,9 @@ const Game = () => {
             <View style={styles.row}>
                 <TouchableOpacity 
                     style={styles.button} 
-                    onPress={() => navigation.navigate('MatchingGame')}
+                    onPress={() => navigation.navigate('MemoryFlipGame')}
                 >
-                    <Text style={styles.buttonText}>Component 3</Text>
+                    <Text style={styles.buttonText}>Matching Pairs</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.button} 

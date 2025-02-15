@@ -5,7 +5,8 @@ import Main from './tabs/Main';
 import UnscrambleWordsGame from './components/UnscrambleWordsGame';
 import MultipleChoiceGame from './components/MultipleChoiceGame';
 import SentenceBuildingGame from './components/SentenceBuildingGame';
-import MatchingGame from './components/MatchingGame';
+import OldMatchingGame from './components/OldMatchingGame';
+import MemoryFlipGame from './components/MemoryFlipGame';
 import Online from './tabs/Online';
 import Game from './tabs/Game';
 import Settings from './tabs/Settings'; 
@@ -22,7 +23,8 @@ export default function App() {
         <Stack.Screen name="UnscrambleWordsGame" component={UnscrambleWordsGame} />
         <Stack.Screen name="SentenceBuildingGame" component={SentenceBuildingGame} />
         <Stack.Screen name="MultipleChoiceGame" component={MultipleChoiceGame} />
-        <Stack.Screen name="MatchingGame" component={MatchingGame} />
+        <Stack.Screen name="MemoryFlipGame" component={MemoryFlipGame} />
+        <Stack.Screen name="MatchingGame" component={OldMatchingGame} />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
