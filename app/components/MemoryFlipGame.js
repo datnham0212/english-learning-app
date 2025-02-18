@@ -2,11 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 
 const wordPairs = [
-  { english: 'Hello', vietnamese: 'Xin chào' },
-  { english: 'Goodbye', vietnamese: 'Tạm biệt' },
-  { english: 'Thank you', vietnamese: 'Cảm ơn' },
-  { english: 'Please', vietnamese: 'Làm ơn' },
-  { english: 'Sorry', vietnamese: 'Xin lỗi' },
+  { english: 'Cat', vietnamese: 'Mèo' }, // Noun
+  { english: 'Dog', vietnamese: 'Chó' }, // Noun
+  { english: 'Happy', vietnamese: 'Vui' }, // Adjective
+  { english: 'Sad', vietnamese: 'Buồn' }, // Adjective
+  { english: 'Run', vietnamese: 'Chạy' }, // Verb
+  { english: 'Eat', vietnamese: 'Ăn' }, // Verb
+  { english: 'Big', vietnamese: 'Lớn' }, // Adjective
+  { english: 'Small', vietnamese: 'Nhỏ' }, // Adjective
+  { english: 'Book', vietnamese: 'Sách' }, // Noun
+  { english: 'Table', vietnamese: 'Bàn' }, // Noun
+  { english: 'Jump', vietnamese: 'Nhảy' }, // Verb
+  { english: 'Sleep', vietnamese: 'Ngủ' }, // Verb
+  { english: 'Beautiful', vietnamese: 'Đẹp' }, // Adjective
+  { english: 'Fast', vietnamese: 'Nhanh' }, // Adjective
+  { english: 'Friend', vietnamese: 'Bạn' }, // Noun
+  { english: 'Work', vietnamese: 'Làm' }, // Verb
 ];
 
 const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
@@ -23,7 +34,7 @@ const MemoryFlipGame = () => {
   }, []);
 
   const startNewRound = () => {
-    const selectedPairs = shuffleArray(wordPairs).slice(0, 3);
+    const selectedPairs = shuffleArray(wordPairs).slice(0, 8);
 
     // Initialize each card with a rotateValue for animation
     const newCards = selectedPairs.flatMap((pair, pairIndex) => [
@@ -182,12 +193,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    width: '100%',
     perspective: 1000, // This enables 3D transformations
   },
   card: {
-    width: 80,
+    width: '22%', // Adjusted to fit 4 cards per row
     height: 80,
-    margin: 5,
+    margin: '1%',
   },
   cardInner: {
     width: '100%',
