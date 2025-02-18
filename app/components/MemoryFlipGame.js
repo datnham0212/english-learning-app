@@ -16,6 +16,7 @@ const MemoryFlipGame = () => {
   const [flippedIndices, setFlippedIndices] = useState([]);
   const [matchedIndices, setMatchedIndices] = useState([]);
   const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     startNewRound();
@@ -35,10 +36,11 @@ const MemoryFlipGame = () => {
     setCards(shuffleArray(newCards));
     setFlippedIndices([]);
     setMatchedIndices([]);
+    setGameOver(false);  // Reset game over state when starting a new round
   };
 
   const handleCardPress = (index) => {
-    if (flippedIndices.length === 2 || matchedIndices.includes(index)) return;
+    if (flippedIndices.length === 2 || matchedIndices.includes(index) || gameOver) return;
 
     const newCards = [...cards];
     newCards[index].isFlipped = true;
@@ -59,7 +61,6 @@ const MemoryFlipGame = () => {
 
     // Ensure the two cards are not the same card
     if (firstCard.id === secondCard.id) {
-      Alert.alert('Invalid', 'You selected the same card twice.');
       setTimeout(() => {
         const newCards = [...cards];
         newCards[firstIndex].isFlipped = false;
@@ -72,7 +73,6 @@ const MemoryFlipGame = () => {
 
     // Ensure one card is English and the other is Vietnamese
     if (firstCard.type === secondCard.type) {
-      Alert.alert('Invalid', 'You selected two cards of the same type.');
       setTimeout(() => {
         const newCards = [...cards];
         newCards[firstIndex].isFlipped = false;
@@ -89,13 +89,12 @@ const MemoryFlipGame = () => {
       firstCard.vietnamese === secondCard.vietnamese;
 
     if (isMatch) {
-      setMatchedIndices(prev => [...prev, firstIndex, secondIndex]);
-      Alert.alert('Correct!', 'You have matched correctly.');
+      setMatchedIndices((prev) => [...prev, firstIndex, secondIndex]);
 
       if (matchedIndices.length + 2 === cards.length) {
-        setScore(prev => prev + 1);
-        Alert.alert('Round Complete!', 'All pairs matched correctly. Starting a new round.');
-        startNewRound();
+        setScore((prev) => prev + 1);
+        setGameOver(true); // All pairs matched, set gameOver state
+        setTimeout(() => startNewRound(), 1000); // Start new round after delay
       }
     } else {
       setTimeout(() => {
@@ -104,7 +103,6 @@ const MemoryFlipGame = () => {
         newCards[secondIndex].isFlipped = false;
         setCards(newCards);
       }, 1000);
-      Alert.alert('Incorrect', 'Try again!');
     }
 
     setFlippedIndices([]);
@@ -124,7 +122,8 @@ const MemoryFlipGame = () => {
                 : styles.cardFacedown,
             ]}
             onPress={() => handleCardPress(index)}
-            disabled={card.isFlipped || matchedIndices.includes(index)}>
+            disabled={card.isFlipped || matchedIndices.includes(index) || gameOver}
+          >
             <Text style={styles.cardText}>
               {card.isFlipped || matchedIndices.includes(index)
                 ? card.type === 'english'
