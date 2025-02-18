@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 
 const wordPairs = [
   { english: 'Hello', vietnamese: 'Xin chào' },
@@ -14,9 +14,9 @@ const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
 const MemoryFlipGame = () => {
   const [cards, setCards] = useState([]);
   const [flippedIndices, setFlippedIndices] = useState([]);
-  const [matchedIndices, setMatchedIndices] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const matchedIndicesRef = useRef([]); // Tracks matched indices persistently without causing re-renders
 
   useEffect(() => {
     startNewRound();
@@ -33,12 +33,12 @@ const MemoryFlipGame = () => {
 
     setCards(shuffleArray(newCards));
     setFlippedIndices([]);
-    setMatchedIndices([]);
+    matchedIndicesRef.current = [];
     setGameOver(false);
   };
 
   const handleCardPress = (index) => {
-    if (flippedIndices.length === 2 || matchedIndices.includes(index) || gameOver) return;
+    if (flippedIndices.length === 2 || gameOver || cards[index].isFlipped || matchedIndicesRef.current.includes(index)) return;
 
     const newCards = [...cards];
     newCards[index].isFlipped = true;
@@ -57,9 +57,8 @@ const MemoryFlipGame = () => {
   const flipCard = (index) => {
     const card = cards[index];
 
-    // Animate the flip
     Animated.timing(card.rotateValue, {
-      toValue: card.isFlipped ? 0 : 1,
+      toValue: card.isFlipped ? 1 : 0,
       duration: 500,
       useNativeDriver: true,
     }).start();
@@ -70,36 +69,14 @@ const MemoryFlipGame = () => {
     const firstCard = cards[firstIndex];
     const secondCard = cards[secondIndex];
 
-    if (firstCard.id === secondCard.id) {
-      setTimeout(() => {
-        const newCards = [...cards];
-        newCards[firstIndex].isFlipped = false;
-        newCards[secondIndex].isFlipped = false;
-        setCards(newCards);
-      }, 1000);
-      setFlippedIndices([]);
-      return;
-    }
-
-    if (firstCard.type === secondCard.type) {
-      setTimeout(() => {
-        const newCards = [...cards];
-        newCards[firstIndex].isFlipped = false;
-        newCards[secondIndex].isFlipped = false;
-        setCards(newCards);
-      }, 1000);
-      setFlippedIndices([]);
-      return;
-    }
-
     const isMatch =
       firstCard.english === secondCard.english &&
       firstCard.vietnamese === secondCard.vietnamese;
 
     if (isMatch) {
-      setMatchedIndices((prev) => [...prev, firstIndex, secondIndex]);
+      matchedIndicesRef.current = [...matchedIndicesRef.current, firstIndex, secondIndex];
 
-      if (matchedIndices.length + 2 === cards.length) {
+      if (matchedIndicesRef.current.length === cards.length) {
         setScore((prev) => prev + 1);
         setGameOver(true);
         setTimeout(() => startNewRound(), 2000);
@@ -110,6 +87,8 @@ const MemoryFlipGame = () => {
         newCards[firstIndex].isFlipped = false;
         newCards[secondIndex].isFlipped = false;
         setCards(newCards);
+        flipCard(firstIndex);
+        flipCard(secondIndex);
       }, 1000);
     }
 
@@ -119,8 +98,13 @@ const MemoryFlipGame = () => {
   const rotateInterpolation = (rotateValue) => {
     return rotateValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'],
+      outputRange: ['0deg', '180deg'], // Adjusted to rotate around Y-axis properly
     });
+  };
+
+  // Function to change the backfaceVisibility based on flipped state
+  const getBackfaceVisibility = (isFlipped) => {
+    return isFlipped ? 'visible' : 'hidden';
   };
 
   return (
@@ -131,12 +115,11 @@ const MemoryFlipGame = () => {
           const rotate = rotateInterpolation(card.rotateValue);
 
           return (
-            <View
+            <TouchableOpacity
               key={card.id}
-              style={[styles.card, card.isFlipped || matchedIndices.includes(index) ? styles.cardFlipped : styles.cardFacedown]}
-              onStartShouldSetResponder={() => true} // Make the View touchable
-              onResponderStart={() => handleCardPress(index)} // Trigger flip on touch
-              disabled={card.isFlipped || matchedIndices.includes(index) || gameOver}
+              style={styles.card}
+              onPress={() => handleCardPress(index)}
+              disabled={card.isFlipped || matchedIndicesRef.current.includes(index) || gameOver}
             >
               <Animated.View
                 style={[
@@ -146,20 +129,36 @@ const MemoryFlipGame = () => {
                   },
                 ]}
               >
-                <View style={[styles.cardFace, styles.cardFront]}>
+                <View
+                  style={[
+                    styles.cardFace,
+                    styles.cardFront,
+                    {
+                      backfaceVisibility: getBackfaceVisibility(card.isFlipped), // Dynamic visibility
+                    },
+                  ]}
+                >
+
+                </View>
+                <View
+                  style={[
+                    styles.cardFace,
+                    styles.cardBack,
+                    {
+                      backfaceVisibility: getBackfaceVisibility(card.isFlipped), // Dynamic visibility
+                    },
+                  ]}
+                >
                   <Text style={styles.cardText}>
-                    {card.isFlipped || matchedIndices.includes(index)
+                    {card.isFlipped || matchedIndicesRef.current.includes(index)
                       ? card.type === 'english'
                         ? card.english
                         : card.vietnamese
-                      : '?'}
+                      : ''}
                   </Text>
                 </View>
-                <View style={[styles.cardFace, styles.cardBack]}>
-                  <Text style={styles.cardText}>?</Text>
-                </View>
               </Animated.View>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>
@@ -188,23 +187,12 @@ const styles = StyleSheet.create({
   card: {
     width: 80,
     height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
     margin: 5,
-    borderRadius: 10,
-  },
-  cardFacedown: {
-    backgroundColor: '#ccc',
-  },
-  cardFlipped: {
-    backgroundColor: '#fff',
   },
   cardInner: {
-    position: 'relative',
     width: '100%',
     height: '100%',
     transformStyle: 'preserve-3d', // Preserve 3D transformation for flipping
-    backfaceVisibility: 'hidden', // Ensure the back is hidden when flipped
   },
   cardFace: {
     position: 'absolute',
@@ -212,19 +200,17 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backfaceVisibility: 'hidden',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backfaceVisibility: 'hidden', // Default to hidden, will be toggled on flip
+    borderRadius: 10,
   },
   cardFront: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: '#ccc',
   },
   cardBack: {
-    backgroundColor: '#ccc',
-    borderRadius: 10,
-    transform: [{ rotateY: '180deg' }],
+    backgroundColor: '#fff', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ rotateY: '180deg' }], // Rotate the back side 180 degrees to be shown
   },
   cardText: {
     fontSize: 18,
