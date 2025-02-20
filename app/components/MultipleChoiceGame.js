@@ -146,6 +146,8 @@ const MultipleChoiceGame = () => {
                         ? isCorrect
                           ? '#4ECDC4'
                           : '#FF6B6B'
+                        : selectedAnswer !== null && option === currentQuestion.correctAnswer
+                        ? '#4ECDC4'
                         : '#fff',
                   },
                 ]}

@@ -33,7 +33,7 @@ const Game = () => {
                     style={styles.button} 
                     onPress={() => navigation.navigate('SchulteTable')}
                 >
-                    <Text style={styles.buttonText}>Component 4</Text>
+                    <Text style={styles.buttonText}>Find the number</Text>
                 </TouchableOpacity>
             </View>
         </View>
