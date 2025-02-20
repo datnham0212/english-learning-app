@@ -1,111 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const SchulteTable = () => {
-  const [numbersToFind, setNumbersToFind] = useState(Array.from({ length: 25 }, (_, i) => i + 1)); // Numbers 1 to 25
-  const [selectedNumbers, setSelectedNumbers] = useState([]);
-  const [currentLevel, setCurrentLevel] = useState(1); // Keeps track of the current level
-  const [score, setScore] = useState(0);
-  const [targetNumber, setTargetNumber] = useState(null); // Target number to find
+// Helper function to convert a number to its word form
+const numberToWords = (num) => {
+  const below20 = [
+    'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+  ];
+  const tens = [
+    '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+  ];
 
-  // Shuffle the numbers array for a random grid order
+  if (num < 20) return below20[num];
+  if (num < 100) {
+    const ten = Math.floor(num / 10);
+    const one = num % 10;
+    return one === 0 ? tens[ten] : `${tens[ten]}-${below20[one]}`;
+  }
+  if (num === 100) return 'One Hundred'; // Handle 100 specifically
+  return num.toString();
+};
+
+const SchulteTable = () => {
+  const [numbersToFind, setNumbersToFind] = useState(Array.from({ length: 25 }, (_, i) => i + 1));
+  const [shuffledNumbers, setShuffledNumbers] = useState([]);
+  const [selectedNumbers, setSelectedNumbers] = useState([]);
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [score, setScore] = useState(0);
+  const [targetNumber, setTargetNumber] = useState(null);
+
+  // Shuffle numbers when the level changes
+  useEffect(() => {
+    const shuffled = shuffleArray([...numbersToFind]);
+    setShuffledNumbers(shuffled);
+  }, [numbersToFind]);
+
   const shuffleArray = (array) => {
-    let currentIndex = array.length, randomIndex, temporaryValue;
-    while (currentIndex !== 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
   };
 
-  // Handle number selection
   const handleNumberSelect = (number) => {
-    if (number === targetNumber && !selectedNumbers.includes(number)) {
-      setSelectedNumbers((prevSelected) => [...prevSelected, number]);
-      setScore((prevScore) => prevScore + 1); // Increase score by 1 when a number is found
-      // Generate a new target number after the correct number is found
+    if (numberToWords(number) === targetNumber && !selectedNumbers.includes(number)) {
+      setSelectedNumbers(prev => [...prev, number]);
+      setScore(prev => prev + 1);
       setTargetNumber(generateRandomTargetNumber());
     }
   };
 
-  // Check if all numbers have been found and go to the next level
   useEffect(() => {
     if (selectedNumbers.length === numbersToFind.length) {
-      if (currentLevel < 4) {
-        setCurrentLevel((prevLevel) => prevLevel + 1);
-      } else {
-        setCurrentLevel(1); // Reset back to level 1 after reaching level 4
-      }
+      const nextLevel = currentLevel < 4 ? currentLevel + 1 : 1;
+      setCurrentLevel(nextLevel);
 
-      // Delay to show level completion
       setTimeout(() => {
-        if (currentLevel === 1) {
-          setNumbersToFind(Array.from({ length: 25 }, (_, i) => i + 1)); // 1-25
-        } else if (currentLevel === 2) {
-          setNumbersToFind(Array.from({ length: 25 }, (_, i) => i + 26)); // 26-50
-        } else if (currentLevel === 3) {
-          setNumbersToFind(Array.from({ length: 25 }, (_, i) => i + 51)); // 51-75
-        } else if (currentLevel === 4) {
-          setNumbersToFind(Array.from({ length: 25 }, (_, i) => i + 76)); // 76-100
+        let newNumbers;
+        switch (nextLevel) {
+          case 1: newNumbers = Array.from({ length: 25 }, (_, i) => i + 1); break;
+          case 2: newNumbers = Array.from({ length: 25 }, (_, i) => i + 26); break;
+          case 3: newNumbers = Array.from({ length: 25 }, (_, i) => i + 51); break;
+          case 4: newNumbers = Array.from({ length: 25 }, (_, i) => i + 76); break;
+          default: newNumbers = [];
         }
-        setSelectedNumbers([]); // Reset selected numbers after each level
+        setNumbersToFind(newNumbers);
+        setSelectedNumbers([]);
       }, 1000);
     }
-  }, [selectedNumbers, currentLevel]);
+  }, [selectedNumbers, numbersToFind.length]);
 
-  // Function to generate a random target number from the remaining unselected numbers
   const generateRandomTargetNumber = () => {
-    const unselectedNumbers = numbersToFind.filter((num) => !selectedNumbers.includes(num));
-    const randomIndex = Math.floor(Math.random() * unselectedNumbers.length);
-    return unselectedNumbers[randomIndex];
+    const unselected = numbersToFind.filter(num => !selectedNumbers.includes(num));
+    if (unselected.length === 0) return null;
+    return numberToWords(unselected[Math.floor(Math.random() * unselected.length)]);
   };
 
-  // Create a 5x5 grid for the current set of numbers
-  const renderGrid = () => {
-    const shuffledNumbers = shuffleArray([...numbersToFind]);
-
-    let grid = [];
-    for (let i = 0; i < 5; i++) {
-      const row = [];
-      for (let j = 0; j < 5; j++) {
-        const number = shuffledNumbers[i * 5 + j];
-        row.push(
-          <TouchableOpacity
-            key={number}
-            style={[styles.cell, selectedNumbers.includes(number) ? styles.selectedCell : null]}
-            onPress={() => handleNumberSelect(number)}
-            disabled={selectedNumbers.includes(number)} // Disable after selection
-          >
-            <Text style={styles.cellText}>{number}</Text> 
-          </TouchableOpacity>
-        );
-      }
-      grid.push(
-        <View key={i} style={styles.row}>
-          {row}
-        </View>
-      );
-    }
-    return grid;
-  };
-
-  // Initially set the first random target number
   useEffect(() => {
-    setTargetNumber(generateRandomTargetNumber());
-  }, [numbersToFind]);
+    const target = generateRandomTargetNumber();
+    if (target !== null) setTargetNumber(target);
+  }, [numbersToFind, selectedNumbers]);
+
+  const renderGrid = () => {
+    return Array(5).fill().map((_, i) => (
+      <View key={`row-${i}`} style={styles.row}>
+        {Array(5).fill().map((__, j) => {
+          const number = shuffledNumbers[i * 5 + j];
+          if (number === undefined) return null; // Skip if number is undefined
+          return (
+            <TouchableOpacity
+              key={`cell-${number}`}
+              style={[styles.cell, selectedNumbers.includes(number) && styles.selectedCell]}
+              onPress={() => handleNumberSelect(number)}
+              disabled={selectedNumbers.includes(number)}
+            >
+              <Text style={styles.cellText}>{number}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    ));
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.score}>Score: {score}</Text> 
-      <Text style={styles.targetNumberText}>Find the number: {targetNumber}</Text> 
+      <Text style={styles.score}>Score: {score}</Text>
+      <Text style={styles.targetNumberText}>{targetNumber || ' '}</Text>
       <View style={styles.grid}>{renderGrid()}</View>
     </View>
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
