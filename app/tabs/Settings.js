@@ -11,6 +11,23 @@ const Settings = React.memo(() => {
   const [checked, setChecked] = useState('en');
   const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
   const [volume, setVolume] = useState(0.5); // Volume state (range 0 - 1)
+  const [timer, setTimer] = useState(60); // Timer state (default 1 min)
+
+  const incrementTimer = () => {
+    if (timer === 30) {
+      setTimer(60);
+    } else if (timer === 60) {
+      setTimer(120);
+    }
+  };
+
+  const decrementTimer = () => {
+    if (timer === 120) {
+      setTimer(60);
+    } else if (timer === 60) {
+      setTimer(30);
+    }
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -74,6 +91,22 @@ const Settings = React.memo(() => {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Timer Selection */}
+        <View style={styles.option}>
+          <Text style={styles.optionName}>Timer</Text>
+          <View style={styles.timerContainer}>
+            <TouchableOpacity onPress={decrementTimer} style={styles.timerButton}>
+              <Text style={styles.timerButtonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.timerValue}>
+              {timer === 30 ? '30 seconds' : timer === 60 ? '1 minute' : '2 minutes'}
+            </Text>
+            <TouchableOpacity onPress={incrementTimer} style={styles.timerButton}>
+              <Text style={styles.timerButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </GestureHandlerRootView>
   );
@@ -123,6 +156,31 @@ const styles = StyleSheet.create({
   slider: {
     width: 250, 
     height: 40,
+  },
+  timerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  timerButton: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  timerButtonText: {
+    color: '#000',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  timerValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginHorizontal: 20,
   },
 });
 
