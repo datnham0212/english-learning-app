@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Navbar from '../components/navbar';
-const Online = React.memo(() => {
+
+const Compete = React.memo(() => {
   return (
-    <Navbar />
+    <View style={styles.container}>
+      <Text>This is the compete page!</Text>
+    </View>
   );
 });
 
@@ -15,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Online;
+export default Compete;
