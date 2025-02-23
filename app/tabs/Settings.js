@@ -100,7 +100,7 @@ const Settings = React.memo(() => {
               <Text style={styles.timerButtonText}>-</Text>
             </TouchableOpacity>
             <Text style={styles.timerValue}>
-              {timer === 30 ? '30 seconds' : timer === 60 ? '1 minute' : '2 minutes'}
+              {timer === 30 ? '30 sec' : timer === 60 ? '1 min' : '2 min'}
             </Text>
             <TouchableOpacity onPress={incrementTimer} style={styles.timerButton}>
               <Text style={styles.timerButtonText}>+</Text>

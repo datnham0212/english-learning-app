@@ -13,7 +13,7 @@ const questions = [
   {
     sentence: 'She sings _____ in the choir.',
     image: require('../assets/singing_choir.jpg'),
-    options: ['LOUDLY', 'LOUD', 'LOUDER', 'Loud'],
+    options: ['LOUDLY', 'LOUD', 'LOUDER', 'LOUDNESS'],
     correctAnswer: 'LOUDLY',
     partOfSpeech: 'Adverb',
   },

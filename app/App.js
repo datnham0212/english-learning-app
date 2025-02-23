@@ -26,7 +26,7 @@ export default function App() {
         <Stack.Screen name="MultipleChoiceGame" component={MultipleChoiceGame} />
         <Stack.Screen name="MemoryFlipGame" component={MemoryFlipGame} />
         <Stack.Screen name="SchulteTable" component={SchulteTable} />
-        <Stack.Screen name="MatchingGame" component={OldMatchingGame} />
+        <Stack.Screen name="OldMatchingGame" component={OldMatchingGame} />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
