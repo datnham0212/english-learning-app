@@ -167,3 +167,5 @@ const styles = StyleSheet.create({
 });
 
 export default TrueOrFalseGame;
+
+//Shape ideas: add triangle, square, circle, rectangle, pentagon, hexagon, octagon, nonagon, cube, sphere, pyramid, cylinder, cone

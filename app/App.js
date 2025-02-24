@@ -8,6 +8,7 @@ import SentenceBuildingGame from './games/SentenceBuildingGame';
 import TrueOrFalseGame from './games/TrueOrFalseGame';
 import SchulteTable from './games/SchulteTable';
 import MemoryFlipGame from './games/MemoryFlipGame';
+import ShapeGame from './games/ShapeGame';
 import Online from './tabs/Online';
 import Game from './tabs/Game';
 import Settings from './tabs/Settings'; 
@@ -27,6 +28,7 @@ export default function App() {
         <Stack.Screen name="MemoryFlipGame" component={MemoryFlipGame} />
         <Stack.Screen name="SchulteTable" component={SchulteTable} />
         <Stack.Screen name="TrueOrFalseGame" component={TrueOrFalseGame} />
+        <Stack.Screen name="ShapeGame" component={ShapeGame} />
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -44,7 +44,7 @@ const Game = () => {
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.button} 
-                    // onPress={() => navigation.navigate('')}
+                    onPress={() => navigation.navigate('ShapeGame')}
                 >
                     <Text style={styles.buttonText}>Game 6</Text>
                 </TouchableOpacity>
