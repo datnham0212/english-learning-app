@@ -38,9 +38,9 @@ const Game = () => {
             <View style={styles.row}>
                 <TouchableOpacity 
                     style={styles.button} 
-                    onPress={() => navigation.navigate('UnscrambleWordsGame')}
+                    onPress={() => navigation.navigate('TrueOrFalseGame')}
                 >
-                    <Text style={styles.buttonText}>Unscramble Words</Text>
+                    <Text style={styles.buttonText}>True or False</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.button} 

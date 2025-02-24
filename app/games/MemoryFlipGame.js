@@ -86,9 +86,8 @@ const MemoryFlipGame = () => {
 
     if (isMatch) {
       matchedIndicesRef.current = [...matchedIndicesRef.current, firstIndex, secondIndex];
-
+      setScore((prev) => prev + 1);
       if (matchedIndicesRef.current.length === cards.length) {
-        setScore((prev) => prev + 1);
         setGameOver(true);
         setTimeout(() => startNewRound(), 2000);
       }
