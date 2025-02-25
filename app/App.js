@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from './tabs/Main';
-import UnscrambleWordsGame from './games/UnscrambleWordsGame';
+import WordScapesGame from './games/WordScapesGame';
 import MultipleChoiceGame from './games/MultipleChoiceGame';
 import SentenceBuildingGame from './games/SentenceBuildingGame';
 import TrueOrFalseGame from './games/TrueOrFalseGame';
@@ -22,7 +22,7 @@ export default function App() {
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Game" component={Game} />
         <Stack.Screen name="Online" component={Online} />
-        <Stack.Screen name="UnscrambleWordsGame" component={UnscrambleWordsGame} />
+        <Stack.Screen name="WordScapesGame" component={WordScapesGame} />
         <Stack.Screen name="SentenceBuildingGame" component={SentenceBuildingGame} />
         <Stack.Screen name="MultipleChoiceGame" component={MultipleChoiceGame} />
         <Stack.Screen name="MemoryFlipGame" component={MemoryFlipGame} />

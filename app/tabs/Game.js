@@ -52,7 +52,7 @@ const Game = () => {
             <View style={styles.row}>
                 <TouchableOpacity 
                     style={styles.button} 
-                    // onPress={() => navigation.navigate('')}
+                    onPress={() => navigation.navigate('WordScapesGame')}
                 >
                     <Text style={styles.buttonText}>Game 7</Text>
                 </TouchableOpacity>
