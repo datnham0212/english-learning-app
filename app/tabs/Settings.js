@@ -4,6 +4,7 @@ import { Switch } from 'react-native-switch';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
+import GoBackButton from '../components/goback';
 
 const { width } = Dimensions.get('window');
 
@@ -32,7 +33,7 @@ const Settings = React.memo(() => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        
+        <GoBackButton />
         {/* Volume Control */}
         <View style={styles.option}>
           <Text style={styles.optionName}>Volume</Text>

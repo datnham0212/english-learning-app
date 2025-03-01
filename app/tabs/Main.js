@@ -2,23 +2,38 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
 const Main = React.memo(() => {
   const navigation = useNavigation();
-  
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} onPress={() => navigation.navigate('Game')}>
-        <Text style={styles.mode_name}>Start</Text>
+      <TouchableOpacity 
+        style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} 
+        onPress={() => navigation.navigate('Game')}
+      >
+        <View style={styles.iconTextContainer}>
+          <Icon name="play" size={30} color="white" style={styles.icon} />
+          <Text style={styles.mode_name}>Start</Text>
+        </View>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.mode_selection, { backgroundColor: '#fa2a55' }]} onPress={() => navigation.navigate('Online')}>
-        <Text style={styles.mode_name}>Online Mode</Text>
+      <TouchableOpacity 
+        style={[styles.mode_selection, { backgroundColor: '#fa2a55' }]} 
+        onPress={() => navigation.navigate('Online')}
+      >
+        <View style={styles.iconTextContainer}>
+          <Icon name="sword-cross" size={30} color="white" style={styles.icon} />
+          <Text style={styles.mode_name}>Online Mode</Text>
+        </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings')}>
+      <TouchableOpacity 
+        style={styles.settingsButton} 
+        onPress={() => navigation.navigate('Settings')}
+      >
         <Icon name="cog" size={30} color="white" style={styles.icon} />
       </TouchableOpacity>
     </View>
@@ -44,6 +59,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
   },
+  iconTextContainer: {
+    flexDirection: 'row',  
+    alignItems: 'center', 
+  },
   icon: {
     marginRight: 0, 
   },
@@ -57,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });
 
 export default Main;
