@@ -5,6 +5,8 @@ import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'rea
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import GoBackButton from '../components/goback';
+import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 
 const { width } = Dimensions.get('window');
 
@@ -36,7 +38,10 @@ const Settings = React.memo(() => {
         <GoBackButton />
         {/* Volume Control */}
         <View style={styles.option}>
-          <Text style={styles.optionName}>Volume</Text>
+          <View style={styles.iconAndName}>
+            <Icon1 name="volume-high" size={30} color="black" />
+            <Text style={styles.optionName}>Volume</Text>
+          </View>
           <Slider
             style={styles.slider}
             minimumValue={0}
@@ -51,36 +56,40 @@ const Settings = React.memo(() => {
 
         {/* Dark Mode */}
         <View style={styles.option}>
-          <Text style={styles.optionName}>Dark Mode</Text>
-          <View>
-            <Switch
-              value={isDarkMode} // Set current state here
-              onValueChange={(val) => {
-                setIsDarkMode(val); // Update state with the new value
-              }}
-              disabled={false}
-              circleSize={30}
-              circleBorderWidth={0}
-              backgroundActive={'dodgerblue'}
-              backgroundInactive={'gray'}
-              circleActiveColor={'#ffffff'}
-              circleInActiveColor={'#ffffff'}
-              changeValueImmediately={true}
-              innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
-              outerCircleStyle={{}}
-              renderActiveText={false}
-              renderInActiveText={false}
-              switchLeftPx={2}
-              switchRightPx={2}
-              switchWidthMultiplier={2.01}
-              switchBorderRadius={30}
-            />
+          <View style={styles.iconAndName}>
+            <Icon1 name="theme-light-dark" size={30} color="black" />
+            <Text style={styles.optionName}>Dark Mode</Text>
           </View>
+          <Switch
+            value={isDarkMode} // Set current state here
+            onValueChange={(val) => {
+              setIsDarkMode(val); // Update state with the new value
+            }}
+            disabled={false}
+            circleSize={30}
+            circleBorderWidth={0}
+            backgroundActive={'dodgerblue'}
+            backgroundInactive={'gray'}
+            circleActiveColor={'#ffffff'}
+            circleInActiveColor={'#ffffff'}
+            changeValueImmediately={true}
+            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
+            outerCircleStyle={{}}
+            renderActiveText={false}
+            renderInActiveText={false}
+            switchLeftPx={2}
+            switchRightPx={2}
+            switchWidthMultiplier={2.01}
+            switchBorderRadius={30}
+          />
         </View>
 
         {/* Language Selection */}
         <View style={styles.option}>
-          <Text style={styles.optionName}>Language</Text>
+          <View style={styles.iconAndName}>
+            <Icon2 name="earth" size={30} color="black" />
+            <Text style={styles.optionName}>Language</Text>
+          </View>
           <View style={styles.radioButtonContainer}>
             <TouchableOpacity onPress={() => setChecked('en')} style={styles.radioButtonItem}>
               <Image source={require('../assets/en.png')} style={[styles.flag, checked === 'en' && styles.selectedFlag]} />
@@ -95,7 +104,10 @@ const Settings = React.memo(() => {
 
         {/* Timer Selection */}
         <View style={styles.option}>
-          <Text style={styles.optionName}>Timer</Text>
+          <View style={styles.iconAndName}>
+            <Icon1 name="timer" size={30} color="black" />
+            <Text style={styles.optionName}>Timer</Text>
+          </View>
           <View style={styles.timerContainer}>
             <TouchableOpacity onPress={decrementTimer} style={styles.timerButton}>
               <Text style={styles.timerButtonText}>-</Text>
@@ -130,10 +142,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
   },
+  iconAndName: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   optionName: {
     fontSize: 17,
     fontWeight: 'bold',
-    marginRight: 10,
+    marginLeft: 10,
   },
   radioButtonContainer: {
     flexDirection: 'row',
@@ -142,7 +158,6 @@ const styles = StyleSheet.create({
   radioButtonItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 10,
   },
   flag: {
     width: 40,
