@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import QuitGameButton from '../components/quitgame';
-
+import Scoreboard from '../components/score';
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
 
@@ -46,6 +46,7 @@ const WordScapesGame = () => {
   return (
     <View style={styles.container}>
       <QuitGameButton />
+      {/* <Scoreboard score={score} /> */}
       {/* Circle */}
       <View style={styles.circle}>
         {/* Render letter boxes */}

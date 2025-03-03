@@ -49,7 +49,7 @@ const Game = () => {
                         style={styles.button} 
                         onPress={() => navigation.navigate('ShapeGame')}
                     >
-                        <Text style={styles.buttonText}>Game 6</Text>
+                        <Text style={styles.buttonText}>Counting Shapes</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.row}>
@@ -57,7 +57,7 @@ const Game = () => {
                         style={styles.button} 
                         onPress={() => navigation.navigate('WordScapesGame')}
                     >
-                        <Text style={styles.buttonText}>Game 7</Text>
+                        <Text style={styles.buttonText}>WordScapes</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.button} 
