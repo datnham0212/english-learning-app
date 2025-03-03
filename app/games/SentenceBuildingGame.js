@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import QuitGameButton from '../components/quitgame';
+import Scoreboard from '../components/score';
 
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -98,7 +99,7 @@ const SentenceBuildingGame = () => {
   return (
     <View style={styles.container}>
       <QuitGameButton />
-      <Text style={styles.score}>Score: {score}</Text>
+      <Scoreboard score={score} />
 
       {currentImage && (
         <Image source={currentImage} style={styles.image} />

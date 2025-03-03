@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
+import Scoreboard from '../components/score';
 // Questions array with sentences and options
 const questions = [
   {
@@ -128,6 +129,7 @@ const MultipleChoiceGame = () => {
   return (
     <View style={styles.container}>
       <QuitGameButton />
+      <Scoreboard score={score} />
       <Text style={styles.score}>Score: {score}</Text>
       {currentQuestion && (
         <>

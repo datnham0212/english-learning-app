@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import Svg, { Circle, Rect, Polygon } from 'react-native-svg';
 import QuitGameButton from '../components/quitgame';
+import Scoreboard from '../components/score';
 
 // Generate a random shape from the list
 const generateRandomShape = () => {
@@ -111,7 +112,7 @@ const ShapeGame = () => {
   return (
     <View style={styles.container}>
       <QuitGameButton />
-      <Text style={styles.score}>Score: {score}</Text>
+      <Scoreboard score={score} />
 
       {/* Render the correct number of shapes */}
       <View style={styles.shapeContainer}>
@@ -170,14 +171,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 22,
     fontWeight: 'bold',
-  },
-  score: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    position: 'absolute',
-    top: 30,
-    zIndex: 1,
-    color: 'black',
   },
 });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
+import Scoreboard from '../components/score';
 // Define the functions before the component
 const generateRandomColor = () => {
   const colors = [
@@ -83,8 +84,7 @@ const TrueOrFalseGame = () => {
     <View style={[styles.container, { backgroundColor: currentColor }]}>
       <QuitGameButton />
       {/* Score Display at the top */}
-      <Text style={styles.score}>Score: {score}</Text>
-
+      <Scoreboard score={score} />
       {/* Statement Text centered and all caps */}
       <View style={[styles.statementContainer, { backgroundColor: `rgba(0, 0, 0, 0.5)` }]}>
         <Text style={[styles.statement, { color: textColor }]}>
@@ -156,14 +156,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 22, // Larger text for the buttons
     fontWeight: 'bold',
-  },
-  score: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    position: 'absolute',
-    top: 30, // Position score near the top
-    zIndex: 1, // Ensure the score is above other components
-    color: 'white', // White color for the score text
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
-
+import Scoreboard from '../components/score';
 const wordPairs = [
   { english: 'Cat', vietnamese: 'Mèo' }, // Noun
   { english: 'Dog', vietnamese: 'Chó' }, // Noun
@@ -121,7 +121,7 @@ const MemoryFlipGame = () => {
   return (
     <View style={styles.container}>
       <QuitGameButton />
-      <Text style={styles.scoreText}>Score: {score}</Text>
+      <Scoreboard score={score} />
       <View style={styles.gridContainer}>
         {cards.map((card, index) => {
           const rotate = rotateInterpolation(card.rotateValue);
