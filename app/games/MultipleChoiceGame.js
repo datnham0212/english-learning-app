@@ -130,7 +130,6 @@ const MultipleChoiceGame = () => {
     <View style={styles.container}>
       <QuitGameButton />
       <Scoreboard score={score} />
-      <Text style={styles.score}>Score: {score}</Text>
       {currentQuestion && (
         <>
           <Text style={styles.sentence}>{currentQuestion.sentence}</Text>
