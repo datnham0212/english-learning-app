@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
+import QuitGameButton from '../components/quitgame';
 // Helper function to convert a number to its word form
 const numberToWords = (num) => {
   const below20 = [
@@ -105,6 +105,7 @@ const SchulteTable = () => {
 
   return (
     <View style={styles.container}>
+      <QuitGameButton />
       <Text style={styles.score}>Score: {score}</Text>
       <Text style={styles.targetNumberText}>{targetNumber || ' '}</Text>
       <View style={styles.grid}>{renderGrid()}</View>

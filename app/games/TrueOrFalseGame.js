@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
+import QuitGameButton from '../components/quitgame';
 // Define the functions before the component
 const generateRandomColor = () => {
   const colors = [
@@ -81,6 +81,7 @@ const TrueOrFalseGame = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: currentColor }]}>
+      <QuitGameButton />
       {/* Score Display at the top */}
       <Text style={styles.score}>Score: {score}</Text>
 

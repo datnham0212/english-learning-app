@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import QuitGameButton from '../components/quitgame';
 
 const wordPairs = [
   { english: 'Cat', vietnamese: 'Mèo' }, // Noun
@@ -119,6 +120,7 @@ const MemoryFlipGame = () => {
 
   return (
     <View style={styles.container}>
+      <QuitGameButton />
       <Text style={styles.scoreText}>Score: {score}</Text>
       <View style={styles.gridContainer}>
         {cards.map((card, index) => {
