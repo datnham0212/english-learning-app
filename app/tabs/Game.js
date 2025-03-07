@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import GoBackButton from '../components/goback';
 
@@ -10,66 +10,50 @@ const Game = () => {
         <View style={styles.container}>
             <GoBackButton />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.row}>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('SentenceBuildingGame')}
-                    >
-                        <Text style={styles.buttonText}>Sentences Builder</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('MultipleChoiceGame')}
-                    >
-                        <Text style={styles.buttonText}>Fill in the blanks</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('MemoryFlipGame')}
-                    >
-                        <Text style={styles.buttonText}>Matching Translation</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('SchulteTable')}
-                    >
-                        <Text style={styles.buttonText}>Find the number</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('TrueOrFalseGame')}
-                    >
-                        <Text style={styles.buttonText}>True or False</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('ShapeGame')}
-                    >
-                        <Text style={styles.buttonText}>Counting Shapes</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => navigation.navigate('WordScapesGame')}
-                    >
-                        <Text style={styles.buttonText}>WordScapes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.button} 
-                        // onPress={() => navigation.navigate('')}
-                    >
-                        <Text style={styles.buttonText}>Game 8</Text>
-                    </TouchableOpacity>
-                </View>
+                {/** Game Buttons Rows */}
+                {gameData.map((row, index) => (
+                    <View key={index} style={styles.row}>
+                        {row.map((game, idx) => (
+                            <TouchableOpacity 
+                                key={idx}
+                                style={styles.button} 
+                                onPress={() => navigation.navigate(game.route)}
+                            >
+                                {game.image ? (
+                                    <ImageBackground 
+                                        source={game.image} 
+                                        resizeMode="cover" 
+                                        style={styles.imageBackground}
+                                    >
+                                        <Text style={styles.buttonText}>{game.label}</Text>
+                                    </ImageBackground>
+                                ) : (
+                                    <Text style={styles.buttonText}>{game.label}</Text>
+                                )}
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                ))}
             </ScrollView>
         </View>
     );
 };
+
+// Game Button Data
+const gameData = [
+    [
+        { label: 'Sentence Building', route: 'SentenceBuildingGame', image: require('../assets/game1.png') },
+        { label: 'Fill in the blanks', route: 'MultipleChoiceGame' }
+    ],
+    [
+        { label: 'Matching Translation', route: 'MemoryFlipGame' },
+        { label: 'Find the number', route: 'SchulteTable' }
+    ],
+    [
+        { label: 'True or False', route: 'TrueOrFalseGame' },
+        { label: 'Counting Shapes', route: 'ShapeGame' }
+    ]
+];
 
 const { width, height } = Dimensions.get('window');
 
@@ -77,14 +61,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 100, // Add padding to ensure content is not cut off
+        paddingTop: 100, // Adjust padding to prevent content cutoff on smaller screens
     },
     scrollContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        paddingBottom: 20, // Add some space at the bottom
     },
     row: {
         flexDirection: 'row',
+        justifyContent: 'space-between', // Ensure buttons are evenly spaced
         marginBottom: 20,
     },
     button: {
@@ -95,11 +81,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,
+        overflow: 'hidden', // Prevent image overflow in buttons
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5, // For Android shadow support
+    },
+    imageBackground: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonText: {
-        fontSize: 18,
+        color: 'black',
+        fontSize: 20,
         fontWeight: 'bold',
-        textAlign: 'center', // Center text inside the button
+        textAlign: 'center',
+        // padding: 10, 
     },
 });
 
