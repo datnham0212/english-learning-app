@@ -31,32 +31,36 @@ const ModalContainer = React.memo(({ title, onResume, onQuit, visible, onClose, 
       <View style={styles.modalContainer}>
         <Text style={styles.modalTitle}>{title}</Text>
         
-        {/* Music and Sound Effects Icons */}
+        {/* Music, Sound Effects, and Vibrate Icons with Labels */}
         <View style={styles.toggleContainer}>
-          <ToggleButton
-            iconName={musicOn ? "music" : "music-off"}  // Toggle between music and music-off
-            onPress={onToggleMusic}
-            IconLibrary={MaterialIcon}
-            color="green"
-            style={styles.toggleButtonMargin}
-            isToggled={musicOn}
-          />
-          
-          {/* Dynamic SFX Icons based on sfxState */}
-          <ToggleButton
-            iconName={sfxState}  // Dynamically change between volume icons
-            onPress={onToggleSFX}
-            IconLibrary={FeatherIcon}
-            color="orange"
-          />
+          <View style={styles.toggleItem}>
+            <ToggleButton
+              iconName={musicOn ? "music" : "music-off"}
+              onPress={onToggleMusic}
+              IconLibrary={MaterialIcon}
+              style={styles.toggleButtonMargin}
+              isToggled={musicOn}
+            />
+            <Text style={styles.toggleLabel}>Music</Text>
+          </View>
 
-          {/* Vibrate Icon */}
-          <ToggleButton
-            iconName={vibrateOn ? "vibrate" : "vibrate-off"}  // Toggle between vibrate and vibrate-off
-            onPress={onToggleVibrate}
-            IconLibrary={MaterialIcon}
-            color="blue"
-          />
+          <View style={styles.toggleItem}>
+            <ToggleButton
+              iconName={sfxState}
+              onPress={onToggleSFX}
+              IconLibrary={FeatherIcon}
+            />
+            <Text style={styles.toggleLabel}>SFX</Text>
+          </View>
+
+          <View style={styles.toggleItem}>
+            <ToggleButton
+              iconName={vibrateOn ? "vibrate" : "vibrate-off"}
+              onPress={onToggleVibrate}
+              IconLibrary={MaterialIcon}
+            />
+            <Text style={styles.toggleLabel}>Vibrate</Text>
+          </View>
         </View>
         
         <View style={styles.buttonContainer}>
@@ -163,9 +167,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    width: width * 0.6,  // Smaller modal width
-    height: height * 0.4,  // Slightly bigger modal height
-    padding: 30,  // Reduced padding
+    width: width * 0.7,  
+    height: height * 0.4,  
+    padding: 30, 
     backgroundColor: 'white',
     borderRadius: 20,
     alignItems: 'center',
@@ -183,16 +187,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   toggleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',  // Spread the toggle buttons evenly
+    alignItems: 'center',
     width: '100%',  // Make container full width
-    marginBottom: 30,  // Add margin between icons and buttons
+    marginBottom: 20,  // Add margin between icons and buttons
+    flexDirection: 'row',  // Arrange icons horizontally
+    justifyContent: 'space-around',  // Space icons evenly
+  },
+  toggleItem: {
+    alignItems: 'center',  // Align icon and label in center
   },
   toggleButton: {
-    width: 50,  // Same size as exit and resume buttons
-    height: 50,  // Same size as exit and resume buttons
+    width: 50, 
+    height: 50, 
     backgroundColor: 'white',
-    borderRadius: 35,  // Ensure circular buttons
+    borderRadius: 25,  // Ensure circular buttons
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -200,6 +208,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 8,
+    marginVertical: 10,  // Add margin between buttons
+  },
+  toggleLabel: {
+    marginTop: 5,  // Space between button and label
+    fontSize: 14,  // Label font size
+    fontWeight: 'bold',  // Label font weight
   },
   buttonContainer: {
     flexDirection: 'row',  // Align buttons side by side
@@ -223,6 +237,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 8,
+    marginHorizontal: 15,  // Add margin between buttons
   },
   buttonText: {
     color: 'white',
@@ -230,5 +245,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 export default QuitGameButton;

@@ -7,6 +7,7 @@ import Slider from '@react-native-community/slider';
 import GoBackButton from '../components/goback';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const { width } = Dimensions.get('window');
 
@@ -15,6 +16,9 @@ const Settings = React.memo(() => {
   const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
   const [volume, setVolume] = useState(0.5); // Volume state (range 0 - 1)
   const [timer, setTimer] = useState(60); // Timer state (default 1 min)
+  const [musicOn, setMusicOn] = useState(true);  // Toggle state for music
+  const [sfxState, setSfxState] = useState('volume-2');  // Toggle state for SFX (initially set to 'volume-2')
+  const [vibrateOn, setVibrateOn] = useState(false);  // Toggle state for vibrate functionality
 
   const incrementTimer = () => {
     if (timer === 30) {
@@ -32,26 +36,54 @@ const Settings = React.memo(() => {
     }
   };
 
+  const toggleMusic = () => setMusicOn(prev => !prev);  // Toggle music state
+
+  // Toggle SFX state between 'volume', 'volume-1', 'volume-x'
+  const toggleSFX = () => {
+    setSfxState(prev => {
+      switch (prev) {
+        case 'volume':
+          return 'volume-1';
+        case 'volume-1':
+          return 'volume-2';
+        case 'volume-x':
+          return 'volume';
+        default:
+          return 'volume-x';
+      }
+    });
+  };
+
+  // Toggle vibrate state
+  const toggleVibrate = () => setVibrateOn(prev => !prev);  // Toggle vibrate state
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
         <GoBackButton />
-        {/* Volume Control */}
-        <View style={styles.option}>
-          <View style={styles.iconAndName}>
-            <Icon1 name="volume-high" size={30} color="black" />
-            <Text style={styles.optionName}>Volume</Text>
+
+        {/* Sound, Volume, and Vibration Controls */}
+        <View style={styles.controlsContainer}>
+          <View style={styles.control}>
+            <Text style={styles.controlText}>Sound</Text>
+            <TouchableOpacity style={styles.toggleButton} onPress={toggleMusic}>
+              <Icon1 name={musicOn ? "music" : "music-off"} size={30} />
+            </TouchableOpacity>
           </View>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            value={volume}
-            onSlidingComplete={(val) => setVolume(val)} // Update on sliding complete
-            minimumTrackTintColor="dodgerblue"
-            maximumTrackTintColor="gray"
-            thumbTintColor="dodgerblue"
-          />
+
+          <View style={styles.control}>
+            <Text style={styles.controlText}>Volume</Text>
+            <TouchableOpacity style={styles.toggleButton} onPress={toggleSFX}>
+              <FeatherIcon name={sfxState} size={30} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.control}>
+            <Text style={styles.controlText}>Vibration</Text>
+            <TouchableOpacity style={styles.toggleButton} onPress={toggleVibrate}>
+              <Icon1 name={vibrateOn ? "vibrate" : "vibrate-off"} size={30} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Dark Mode */}
@@ -90,15 +122,19 @@ const Settings = React.memo(() => {
             <Icon2 name="earth" size={30} color="black" />
             <Text style={styles.optionName}>Language</Text>
           </View>
-          <View style={styles.radioButtonContainer}>
-            <TouchableOpacity onPress={() => setChecked('en')} style={styles.radioButtonItem}>
-              <Image source={require('../assets/en.png')} style={[styles.flag, checked === 'en' && styles.selectedFlag]} />
-              <Text>English</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setChecked('vi')} style={styles.radioButtonItem}>
-              <Image source={require('../assets/vn.png')} style={[styles.flag, checked === 'vi' && styles.selectedFlag]} />
-              <Text>Vietnamese</Text>
-            </TouchableOpacity>
+
+          <View style={styles.languageContainer}>
+            {checked === 'en' ? (
+              <TouchableOpacity onPress={() => setChecked('vi')} style={styles.languageItem}>
+                <Image source={require('../assets/en.png')} style={styles.flag} />
+                <Text style={styles.languageText}>English</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setChecked('en')} style={styles.languageItem}>
+                <Image source={require('../assets/vn.png')} style={styles.flag} />
+                <Text style={styles.languageText}>Tiếng Việt</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -155,7 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  radioButtonItem: {
+  languageItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -197,6 +233,46 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginHorizontal: 20,
+  },
+  toggleButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  controlsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginVertical: 20,
+  },
+  control: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width / 3 - 20,
+    height: 100,
+    borderRadius: 10,
+    backgroundColor: 'lightgray',
+    marginHorizontal: 5,
+    paddingHorizontal: 10,
+  },
+  controlText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  languageText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
 
