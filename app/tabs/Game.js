@@ -43,7 +43,7 @@ const Game = () => {
 const gameData = [
     [
         { label: 'Sentence Building', route: 'SentenceBuildingGame', image: require('../assets/game1.png') },
-        { label: 'Fill in the blanks', route: 'MultipleChoiceGame' }
+        { label: 'Fill in the blanks', route: 'MultipleChoiceGame', image: require('../assets/game2.png') }
     ],
     [
         { label: 'Matching Translation', route: 'MemoryFlipGame' },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         height: height * 0.35,
         margin: 10,
         backgroundColor: '#ddd',
-        justifyContent: 'center',
+        justifyContent: 'flex-start', // Align text to the top
         alignItems: 'center',
         borderRadius: 20,
         overflow: 'hidden', // Prevent image overflow in buttons
@@ -92,15 +92,18 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        justifyContent: 'center',
+        justifyContent: 'flex-start', // Align text to the top
         alignItems: 'center',
     },
     buttonText: {
-        color: 'black',
-        fontSize: 20,
-        fontWeight: 'bold',
+        width: '100%',
+        height: '30%',
         textAlign: 'center',
-        // padding: 10, 
+        // color: 'white',
+        fontSize: 22,
+        fontWeight: 'bold',
+        // backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+        paddingTop: 10,
     },
 });
 

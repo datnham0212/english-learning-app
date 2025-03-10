@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
+import { playSound } from '../sound/TrueFalse';
+
 // Define the functions before the component
 const generateRandomColor = () => {
   const colors = [
@@ -56,6 +58,7 @@ const TrueOrFalseGame = () => {
     // Create the interval that triggers after 5 seconds if no answer is provided
     intervalRef.current = setInterval(() => {
       if (!hasAnswered) {
+        playSound(require('../soundassets/TrueFalsesound/TrueFalseincorrect.mp3'));
         startNewRound(); // If no answer, generate a new round
       }
     }, 5000);
@@ -68,8 +71,10 @@ const TrueOrFalseGame = () => {
 
     // Update the score
     if (isTrue === correctAnswer) {
+      playSound(require('../soundassets/TrueFalsesound/TrueFalsecorrect.mp3'));
       setScore(score + 1);
     } else {
+      playSound(require('../soundassets/TrueFalsesound/TrueFalseincorrect.mp3'));
       setScore(score - 1);
     }
 

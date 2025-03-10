@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
+import { playSound } from '../sound/FinNum';
 // Helper function to convert a number to its word form
 const numberToWords = (num) => {
   const below20 = [
@@ -46,14 +47,20 @@ const SchulteTable = () => {
 
   const handleNumberSelect = (number) => {
     if (numberToWords(number) === targetNumber && !selectedNumbers.includes(number)) {
-      setSelectedNumbers(prev => [...prev, number]);
-      setScore(prev => prev + 1);
-      setTargetNumber(generateRandomTargetNumber());
+      playSound(require('../soundassets/FindNumsound/FiNumcorrect.mp3'));
+      setTimeout(() => {
+        setSelectedNumbers(prev => [...prev, number]);
+        setScore(prev => prev + 1);
+        setTargetNumber(generateRandomTargetNumber());
+    }, 150);
+    } else {
+      playSound(require('../soundassets/FindNumsound/FiNumincorrect.mp3'));
     }
   };
 
   useEffect(() => {
     if (selectedNumbers.length === numbersToFind.length) {
+      playSound(require('../soundassets/FindNumsound/FiNumcongra.mp3'));
       const nextLevel = currentLevel < 4 ? currentLevel + 1 : 1;
       setCurrentLevel(nextLevel);
 
@@ -68,7 +75,7 @@ const SchulteTable = () => {
         }
         setNumbersToFind(newNumbers);
         setSelectedNumbers([]);
-      }, 1000);
+      }, 1100);
     }
   }, [selectedNumbers, numbersToFind.length]);
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
+import { playSound } from '../sound/SenBuild';
 
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -52,10 +53,12 @@ const SentenceBuildingGame = () => {
   const handleWordTap = (word, index, fromScrambled = true) => {
     if (fromScrambled) {
       // Move word from scrambledWords to selectedWords
+      playSound(require('../soundassets/SentBuildSound/SBclick.mp3'));
       setSelectedWords((prev) => [...prev, word]);
       setScrambledWords((prev) => prev.filter((_, i) => i !== index));
     } else {
       // Move word from selectedWords back to scrambledWords
+      playSound(require('../soundassets/SentBuildSound/SBremoveclick.mp3'));
       setScrambledWords((prev) => [...prev, word]);
       setSelectedWords((prev) => prev.filter((_, i) => i !== index));
     }
@@ -67,13 +70,15 @@ const SentenceBuildingGame = () => {
     const userAnswer = selectedWords.map(item => item.word).join(' ');
     if (userAnswer === currentSentence) {
       setScore(prevScore => prevScore + 1);
+      playSound(require('../soundassets/SentBuildSound/SBcorrect.mp3'));
       setFeedbackMessage('Correct! You built the sentence!');
       setTimeout(() => {
         setFeedbackMessage('');
         loadNewSentence();
-      }, 500);
+      }, 1000);
     } else if (selectedWords.length === currentSentence.split(' ').length) {
       setFeedbackMessage('Wrong! Try again.');
+      playSound(require('../soundassets/SentBuildSound/SBincorrect.mp3'));
       setTimeout(() => {
         setFeedbackMessage('');
         setSelectedWords([]);
@@ -81,7 +86,7 @@ const SentenceBuildingGame = () => {
           key: `${index}`,
           word,
         }))));
-      }, 500);
+      }, 1500);
     }
   }, [selectedWords, currentSentence]);
 

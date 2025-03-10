@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
+import { playSound } from '../sound/FlippingCard';
+
 const wordPairs = [
   { english: 'Cat', vietnamese: 'Mèo' }, // Noun
   { english: 'Dog', vietnamese: 'Chó' }, // Noun
@@ -42,7 +44,7 @@ const MemoryFlipGame = () => {
       { ...pair, id: pairIndex * 2, type: 'english', isFlipped: false, rotateValue: new Animated.Value(0) },
       { ...pair, id: pairIndex * 2 + 1, type: 'vietnamese', isFlipped: false, rotateValue: new Animated.Value(0) },
     ]);
-
+    
     setCards(shuffleArray(newCards));
     setFlippedIndices([]);
     matchedIndicesRef.current = [];
@@ -51,7 +53,6 @@ const MemoryFlipGame = () => {
 
   const handleCardPress = (index) => {
     if (flippedIndices.length === 2 || gameOver || cards[index].isFlipped || matchedIndicesRef.current.includes(index)) return;
-
     const newCards = [...cards];
     newCards[index].isFlipped = true;
     setCards(newCards);
@@ -59,6 +60,9 @@ const MemoryFlipGame = () => {
     const newFlippedIndices = [...flippedIndices, index];
     setFlippedIndices(newFlippedIndices);
 
+    setTimeout(() => {
+    playSound(require('../soundassets/FlippingCardsound/FCopen.mp3'));
+    }, -1000);
     flipCard(index);
 
     if (newFlippedIndices.length === 2) {
@@ -68,7 +72,6 @@ const MemoryFlipGame = () => {
 
   const flipCard = (index) => {
     const card = cards[index];
-
     Animated.timing(card.rotateValue, {
       toValue: card.isFlipped ? 1 : 0,
       duration: 500,
@@ -87,9 +90,14 @@ const MemoryFlipGame = () => {
 
     if (isMatch) {
       matchedIndicesRef.current = [...matchedIndicesRef.current, firstIndex, secondIndex];
+      if (matchedIndicesRef.current.length !== cards.length)  
+        setTimeout(() => {
+        playSound(require('../soundassets/FlippingCardsound/FCcorrect.mp3'));
+        }, 600);
       setScore((prev) => prev + 1);
       if (matchedIndicesRef.current.length === cards.length) {
         setGameOver(true);
+        playSound(require('../soundassets/FlippingCardsound/FCcongra.mp3'));
         setTimeout(() => startNewRound(), 2000);
       }
     } else {
@@ -100,6 +108,7 @@ const MemoryFlipGame = () => {
         setCards(newCards);
         flipCard(firstIndex);
         flipCard(secondIndex);
+        playSound(require('../soundassets/FlippingCardsound/FCclose.mp3'));
       }, 1000);
     }
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
+import { playSound } from '../sound/SenBuild';
+
 // Questions array with sentences and options
 const questions = [
   {
@@ -112,13 +114,15 @@ const MultipleChoiceGame = () => {
     setSelectedAnswer(selectedOption);
     if (selectedOption === currentQuestion.correctAnswer) {
       setIsCorrect(true);
+      playSound(require('../soundassets/FillBlankSound/FillBlankcorrect.mp3'));
       setScore((prevScore) => prevScore + 1);
     } else {
       setIsCorrect(false);
+      playSound(require('../soundassets/FillBlankSound/FillBlankincorrect.mp3'));
     }
     setTimeout(() => {
       loadNewQuestion();
-    }, 1000);
+    }, 1250);
   };
 
   // Initialize game by loading the first question
