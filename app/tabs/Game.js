@@ -2,9 +2,15 @@ import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import GoBackButton from '../components/goback';
+import {playSound} from'../sound/opensound';
 
 const Game = () => {
     const navigation = useNavigation();
+
+    const handlePress = (route) => {
+        playSound(require('../soundassets/opensound.mp3'));
+        navigation.navigate(route);
+    };
 
     return (
         <View style={styles.container}>
@@ -17,7 +23,7 @@ const Game = () => {
                             <TouchableOpacity 
                                 key={idx}
                                 style={styles.button} 
-                                onPress={() => navigation.navigate(game.route)}
+                                onPress={() => handlePress(game.route)}
                             >
                                 {game.image ? (
                                     <ImageBackground 
