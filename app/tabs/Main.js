@@ -1,14 +1,19 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
-const Main = React.memo(() => {
-  const navigation = useNavigation();
-
+const Main = ({ navigation }) => { 
+  if (!navigation) {
+    console.error("Navigation is undefined!");
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: 'red' }}>Navigation is undefined!</Text>
+      </View>
+    );
+  } 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -38,7 +43,9 @@ const Main = React.memo(() => {
       </TouchableOpacity>
     </View>
   );
-});
+};
+
+export default Main;  
 
 const styles = StyleSheet.create({
   container: {
@@ -60,15 +67,15 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   iconTextContainer: {
-    flexDirection: 'row',  
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
-    marginRight: 0, 
+    marginRight: 0,
   },
   settingsButton: {
     position: 'absolute',
-    top: 50, 
+    top: 50,
     left: 20,
     width: 50,
     height: 50,
@@ -78,5 +85,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default Main;
