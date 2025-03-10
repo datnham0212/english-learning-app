@@ -1,75 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import QuitGameButton from '../components/quitgame';
-import Scoreboard from '../components/score';
+import QuitGameButton from '../components/quitgame';  // Assuming this still exists
+import Scoreboard from '../components/score'; // Assuming this still exists
 import { playSound } from '../sound/TrueFalse';
+import Svg, { Circle, Rect, Polygon, Ellipse, Path } from 'react-native-svg'; // Importing SVG components
 
-// Define the functions before the component
+// Generate a random color
 const generateRandomColor = () => {
-  const colors = [
-    'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink',
-    'white', 'black', 'gray', 'brown', 'cyan'
-  ];
+  const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
-const generateStatement = (color) => {
-  const correctStatement = `This is ${color}`;
-  const incorrectStatement = `This is not ${color}`;
-  return Math.random() > 0.5 ? correctStatement : incorrectStatement;
-};
-
-// Helper function to determine text color based on background color brightness
-const getTextColor = (bgColor) => {
-  const colorBrightness = {
-    red: 0.3,
-    blue: 0.3,
-    green: 0.4,
-    yellow: 0.6,
-    purple: 0.4,
-    orange: 0.5,
-    pink: 0.5,
-    white: 0.9,
-    black: 0.1,
-    gray: 0.5,
-    brown: 0.2,
-    cyan: 0.6,
-  };
-
-  return colorBrightness[bgColor] > 0.5 ? 'black' : 'white';
+// Generate a random shape
+const generateRandomShape = () => {
+  const shapes = ['circle', 'square', 'triangle', 'rectangle', 'star', 'diamond', 'oval', 'heart'];
+  return shapes[Math.floor(Math.random() * shapes.length)];
 };
 
 const TrueOrFalseGame = () => {
-  const [currentColor, setCurrentColor] = useState(generateRandomColor());
-  const [currentStatement, setCurrentStatement] = useState(generateStatement(currentColor));
+  const [currentColor, setCurrentColor] = useState('');
+  const [currentShape, setCurrentShape] = useState('');
+  const [currentStatement, setCurrentStatement] = useState('');
   const [score, setScore] = useState(0);
-  const [hasAnswered, setHasAnswered] = useState(false);
-  
-  const intervalRef = useRef(null);
+  const [isShapeQuestion, setIsShapeQuestion] = useState(false); // New state to track the type of question
+  const [correctAnswer, setCorrectAnswer] = useState(false); // State to track if the answer should be true or false
 
+  // Start a new round with a random color, shape, and random true/false statement
   const startNewRound = () => {
-    const newColor = generateRandomColor();
-    setCurrentColor(newColor);
-    setCurrentStatement(generateStatement(newColor));
-    setHasAnswered(false); // Reset the answered state for the new round
+    const questionType = Math.random() > 0.5; // Randomly decide between color or shape question
+    setIsShapeQuestion(questionType);
+
+    if (questionType) {
+      // Shape question
+      const newShape = generateRandomShape();
+      setCurrentShape(newShape);
+      // Randomly decide if the statement should be true or false
+      const isCorrect = Math.random() > 0.5;
+      setCorrectAnswer(isCorrect);
+      setCurrentStatement(isCorrect ? newShape : generateRandomShape()); // If false, give a random shape that's not the current one
+    } else {
+      // Color question
+      const newColor = generateRandomColor();
+      setCurrentColor(newColor);
+      // Randomly decide if the statement should be true or false
+      const isCorrect = Math.random() > 0.5;
+      setCorrectAnswer(isCorrect);
+      setCurrentStatement(isCorrect ? newColor : generateRandomColor()); // If false, give a random color that's not the current one
+    }
   };
 
   useEffect(() => {
-    // Create the interval that triggers after 5 seconds if no answer is provided
-    intervalRef.current = setInterval(() => {
-      if (!hasAnswered) {
-        playSound(require('../soundassets/TrueFalsesound/TrueFalseincorrect.mp3'));
-        startNewRound(); // If no answer, generate a new round
-      }
-    }, 5000);
-
-    return () => clearInterval(intervalRef.current); // Clean up the interval on component unmount
-  }, [hasAnswered]);
+    startNewRound(); // Start the first round when the component mounts
+  }, []); // Empty dependency array ensures it runs only once after the initial render
 
   const handleAnswer = (isTrue) => {
-    const correctAnswer = currentStatement === `This is ${currentColor}`;
-
-    // Update the score
+    // Check if the player's answer is correct
     if (isTrue === correctAnswer) {
       playSound(require('../soundassets/TrueFalsesound/TrueFalsecorrect.mp3'));
       setScore(score + 1);
@@ -78,26 +63,92 @@ const TrueOrFalseGame = () => {
       setScore(score - 1);
     }
 
-    // Reset the interval by clearing and restarting it
-    clearInterval(intervalRef.current); // Clear the previous interval
-    startNewRound(); // Start a new round immediately after the answer
+    startNewRound(); // Start new round immediately after answering
   };
 
-  const textColor = getTextColor(currentColor); // Determine the text color based on the background color
+  // Function to render the shape (if it's a shape question)
+  const renderShape = () => {
+    if (isShapeQuestion) {
+      switch (currentShape) {
+        case 'circle':
+          return (
+            <Svg height="100" width="100">
+              <Circle cx="50" cy="50" r="40" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+        case 'square':
+          return (
+            <Svg height="100" width="100">
+              <Rect x="10" y="10" width="80" height="80" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+        case 'triangle':
+          return (
+            <Svg height="100" width="100">
+              <Polygon points="50,10 90,90 10,90" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+        case 'rectangle':
+          return (
+            <Svg height="100" width="150">
+              <Rect x="10" y="10" width="130" height="60" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+        case 'star':
+          return (
+            <Svg height="100" width="100">
+              <Path
+                d="M50,10 L61,35 L98,35 L68,57 L79,91 L50,70 L21,91 L32,57 L2,35 L39,35 Z"
+                fill="white"
+                stroke="black"
+                strokeWidth="4"
+              />
+            </Svg>
+          );
+        case 'diamond':
+          return (
+            <Svg height="100" width="100">
+              <Polygon points="50,10 90,50 50,90 10,50" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+        case 'oval':
+          return (
+            <Svg height="100" width="150">
+              <Ellipse cx="75" cy="50" rx="60" ry="40" fill="white" stroke="black" strokeWidth="4" />
+            </Svg>
+          );
+          case 'heart':
+            return (
+              <Svg height="100" width="100">
+                <Path
+                  d="M50,80 L40,70 C25,55 10,40 10,25 C10,10 25,5 40,5 C50,5 55,15 60,20 C65,15 70,5 80,5 C95,5 110,10 110,25 C110,40 95,55 80,70 L50,80 Z"
+                  fill="white"
+                  stroke="black"
+                  strokeWidth="4"
+                />
+              </Svg>
+            );
+          
+        default:
+          return null;
+      }
+    }
+    return null; // No shape rendered if it's not a shape question
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: currentColor }]}>
+    <View style={[styles.container, { backgroundColor: isShapeQuestion ? 'white' : currentColor }]}>
       <QuitGameButton />
-      {/* Score Display at the top */}
       <Scoreboard score={score} />
-      {/* Statement Text centered and all caps */}
       <View style={[styles.statementContainer, { backgroundColor: `rgba(0, 0, 0, 0.5)` }]}>
-        <Text style={[styles.statement, { color: textColor }]}>
+        <Text style={styles.statement}>
           {currentStatement.toUpperCase()}
         </Text>
       </View>
 
-      {/* Button container for True and False */}
+      {/* Render the shape if it's a shape question */}
+      {renderShape()}
+
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={[styles.button, styles.trueButton]} onPress={() => handleAnswer(true)}>
           <Text style={styles.buttonText}>True</Text>
@@ -114,34 +165,34 @@ const TrueOrFalseGame = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center', // Align content to the center vertically
-    alignItems: 'center', // Center horizontally
-    paddingTop: 50, // Space at the top for score
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 50,
   },
   statementContainer: {
     padding: 20,
     borderRadius: 10,
     marginBottom: 30,
-    maxWidth: '80%', // Limiting width to avoid text from being too wide
-    textAlign: 'center', // Center the statement within the box
+    maxWidth: '80%',
+    textAlign: 'center',
   },
   statement: {
-    fontSize: 36, // Bigger font size for better readability
+    fontSize: 36,
     fontWeight: 'bold',
-    color: 'white', // Default color, will be overridden by dynamic color
-    textAlign: 'center', // Ensure the statement is centered
-    textTransform: 'uppercase', // Ensure all caps
+    color: 'white',
+    textAlign: 'center',
+    textTransform: 'uppercase',
   },
   buttonsContainer: {
-    flexDirection: 'row', // Arrange buttons horizontally
-    justifyContent: 'space-between', // Space between the buttons
-    width: '100%', // Take full width
-    position: 'absolute', // Position buttons at the bottom
-    bottom: 50, // Adjust this value for more or less space from the bottom
-    paddingHorizontal: 40, // Space on the sides of the buttons
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    position: 'absolute',
+    bottom: 50,
+    paddingHorizontal: 40,
   },
   button: {
-    flex: 1, // Allow both buttons to take equal space
+    flex: 1,
     backgroundColor: '#008CBA',
     padding: 20,
     marginHorizontal: 10,
@@ -149,7 +200,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 6,
-    borderColor: 'white', // White border for better visibility
+    borderColor: 'white',
   },
   trueButton: {
     backgroundColor: '#4CAF50', // Green for True
@@ -159,11 +210,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 22, // Larger text for the buttons
+    fontSize: 22,
     fontWeight: 'bold',
   },
 });
 
 export default TrueOrFalseGame;
-
-//Shape ideas: add triangle, square, circle, rectangle, pentagon, hexagon, octagon, nonagon, cube, sphere, pyramid, cylinder, cone
