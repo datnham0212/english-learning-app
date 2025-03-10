@@ -12,10 +12,14 @@ import ShapeGame from './games/ShapeGame';
 import Online from './tabs/Online';
 import Game from './tabs/Game';
 import Settings from './tabs/Settings'; 
+import { playBackgroundMusic } from './sound/BGmusic';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  React.useEffect(() => {
+    playBackgroundMusic();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false, animation: 'scale_from_center' }}>

@@ -2,9 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import GoBackButton from '../components/goback';
+import { playSound } from '../sound/opensound';
 
 const Game = () => {
     const navigation = useNavigation();
+
+    const handlePress = (screenName) => {
+        playSound(require('../soundassets/opensound.mp3'));
+        setTimeout(() => {
+            navigation.navigate(screenName);
+        }, 200);
+    };
 
     return (
         <View style={styles.container}>
@@ -13,13 +21,13 @@ const Game = () => {
                 <View style={styles.row}>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('SentenceBuildingGame')}
+                        onPress={() => handlePress('SentenceBuildingGame')}
                     >
                         <Text style={styles.buttonText}>Sentences Builder</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('MultipleChoiceGame')}
+                        onPress={() => handlePress('MultipleChoiceGame')}
                     >
                         <Text style={styles.buttonText}>Fill in the blanks</Text>
                     </TouchableOpacity>
@@ -27,13 +35,13 @@ const Game = () => {
                 <View style={styles.row}>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('MemoryFlipGame')}
+                        onPress={() => handlePress('MemoryFlipGame')}
                     >
                         <Text style={styles.buttonText}>Matching Translation</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('SchulteTable')}
+                        onPress={() => handlePress('SchulteTable')}
                     >
                         <Text style={styles.buttonText}>Find the number</Text>
                     </TouchableOpacity>
@@ -41,13 +49,13 @@ const Game = () => {
                 <View style={styles.row}>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('TrueOrFalseGame')}
+                        onPress={() => handlePress('TrueOrFalseGame')}
                     >
                         <Text style={styles.buttonText}>True or False</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('ShapeGame')}
+                        onPress={() => handlePress('ShapeGame')}
                     >
                         <Text style={styles.buttonText}>Counting Shapes</Text>
                     </TouchableOpacity>
@@ -55,7 +63,7 @@ const Game = () => {
                 <View style={styles.row}>
                     <TouchableOpacity 
                         style={styles.button} 
-                        onPress={() => navigation.navigate('WordScapesGame')}
+                        onPress={() => handlePress('WordScapesGame')}
                     >
                         <Text style={styles.buttonText}>WordScapes</Text>
                     </TouchableOpacity>
