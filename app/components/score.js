@@ -12,11 +12,11 @@ const Scoreboard = ({ score }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 30,
+    top: 50,
     zIndex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: '60%',
   },
   score: {
     fontSize: 30,

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import SettingsButton from '../components/settingsButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -35,12 +36,7 @@ const Main = ({ navigation }) => {
           <Text style={styles.mode_name}>Online Mode</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.settingsButton} 
-        onPress={() => navigation.navigate('Settings')}
-      >
-        <Icon name="cog" size={30} color="white" style={styles.icon} />
-      </TouchableOpacity>
+      <SettingsButton onPress={() => navigation.navigate('Settings')} />
     </View>
   );
 };
@@ -72,16 +68,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 0,
-  },
-  settingsButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    width: 50,
-    height: 50,
-    backgroundColor: 'grey',
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

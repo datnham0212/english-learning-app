@@ -4,6 +4,7 @@ import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
 import { playSound } from '../sound/SenBuild';
 
+
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
   while (0 !== currentIndex) {
@@ -16,7 +17,7 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const SentenceBuildingGame = () => {
+const SentenceBuildingGame = ({ navigation }) => {
   const [currentSentence, setCurrentSentence] = useState('');
   const [scrambledWords, setScrambledWords] = useState([]);
   const [score, setScore] = useState(0);
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   },
   answerContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap', // Allow words to wrap to the next line
+    flexWrap: 'wrap', 
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 20,
