@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import QuitGameButton from '../components/quitgame';  // Assuming this still exists
 import Scoreboard from '../components/score'; // Assuming this still exists
 import { playSound } from '../sound/TrueFalse';
-import Svg, { Circle, Rect, Polygon, Ellipse, Path } from 'react-native-svg'; // Importing SVG components
+
+// Importing shape images
+import circleImage from '../assets/circle.png';
+import squareImage from '../assets/square.png';
+import triangleImage from '../assets/triangle.png';
+import rectangleImage from '../assets/rectangle.png';
+import starImage from '../assets/star.png';
+import diamondImage from '../assets/diamond.png';
+import ovalImage from '../assets/oval.png';
+import heartImage from '../assets/heart.png';
 
 // Generate a random color
 const generateRandomColor = () => {
@@ -15,6 +24,15 @@ const generateRandomColor = () => {
 const generateRandomShape = () => {
   const shapes = ['circle', 'square', 'triangle', 'rectangle', 'star', 'diamond', 'oval', 'heart'];
   return shapes[Math.floor(Math.random() * shapes.length)];
+};
+
+// Helper function to generate a false statement
+const generateFalseStatement = (correctValue, generateRandomValue) => {
+  let falseValue;
+  do {
+    falseValue = generateRandomValue();
+  } while (falseValue === correctValue);
+  return falseValue;
 };
 
 const TrueOrFalseGame = () => {
@@ -34,18 +52,16 @@ const TrueOrFalseGame = () => {
       // Shape question
       const newShape = generateRandomShape();
       setCurrentShape(newShape);
-      // Randomly decide if the statement should be true or false
-      const isCorrect = Math.random() > 0.5;
+      const isCorrect = Math.random() > 0.5; // Randomly decide if the statement should be true or false
       setCorrectAnswer(isCorrect);
-      setCurrentStatement(isCorrect ? newShape : generateRandomShape()); // If false, give a random shape that's not the current one
+      setCurrentStatement(isCorrect ? newShape : generateFalseStatement(newShape, generateRandomShape));
     } else {
       // Color question
       const newColor = generateRandomColor();
       setCurrentColor(newColor);
-      // Randomly decide if the statement should be true or false
-      const isCorrect = Math.random() > 0.5;
+      const isCorrect = Math.random() > 0.5; // Randomly decide if the statement should be true or false
       setCorrectAnswer(isCorrect);
-      setCurrentStatement(isCorrect ? newColor : generateRandomColor()); // If false, give a random color that's not the current one
+      setCurrentStatement(isCorrect ? newColor : generateFalseStatement(newColor, generateRandomColor));
     }
   };
 
@@ -71,64 +87,21 @@ const TrueOrFalseGame = () => {
     if (isShapeQuestion) {
       switch (currentShape) {
         case 'circle':
-          return (
-            <Svg height="100" width="100">
-              <Circle cx="50" cy="50" r="40" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
+          return <Image source={circleImage} style={styles.shapeImage} />;
         case 'square':
-          return (
-            <Svg height="100" width="100">
-              <Rect x="10" y="10" width="80" height="80" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
+          return <Image source={squareImage} style={styles.shapeImage} />;
         case 'triangle':
-          return (
-            <Svg height="100" width="100">
-              <Polygon points="50,10 90,90 10,90" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
+          return <Image source={triangleImage} style={styles.shapeImage} />;
         case 'rectangle':
-          return (
-            <Svg height="100" width="150">
-              <Rect x="10" y="10" width="130" height="60" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
+          return <Image source={rectangleImage} style={styles.shapeImage} />;
         case 'star':
-          return (
-            <Svg height="100" width="100">
-              <Path
-                d="M50,10 L61,35 L98,35 L68,57 L79,91 L50,70 L21,91 L32,57 L2,35 L39,35 Z"
-                fill="white"
-                stroke="black"
-                strokeWidth="4"
-              />
-            </Svg>
-          );
+          return <Image source={starImage} style={styles.shapeImage} />;
         case 'diamond':
-          return (
-            <Svg height="100" width="100">
-              <Polygon points="50,10 90,50 50,90 10,50" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
+          return <Image source={diamondImage} style={styles.shapeImage} />;
         case 'oval':
-          return (
-            <Svg height="100" width="150">
-              <Ellipse cx="75" cy="50" rx="60" ry="40" fill="white" stroke="black" strokeWidth="4" />
-            </Svg>
-          );
-          case 'heart':
-            return (
-              <Svg height="100" width="100">
-                <Path
-                  d="M50,80 L40,70 C25,55 10,40 10,25 C10,10 25,5 40,5 C50,5 55,15 60,20 C65,15 70,5 80,5 C95,5 110,10 110,25 C110,40 95,55 80,70 L50,80 Z"
-                  fill="white"
-                  stroke="black"
-                  strokeWidth="4"
-                />
-              </Svg>
-            );
-          
+          return <Image source={ovalImage} style={styles.shapeImage} />;
+        case 'heart':
+          return <Image source={heartImage} style={styles.shapeImage} />;
         default:
           return null;
       }
@@ -212,6 +185,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  shapeImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
   },
 });
 

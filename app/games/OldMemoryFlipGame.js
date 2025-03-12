@@ -25,15 +25,6 @@ const wordPairs = [
 
 const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
 
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
 const MemoryFlipGame = () => {
   const [cards, setCards] = useState([]);
   const [flippedIndices, setFlippedIndices] = useState([]);
@@ -46,7 +37,7 @@ const MemoryFlipGame = () => {
   }, []);
 
   const startNewRound = () => {
-    const selectedPairs = shuffleArray(wordPairs).slice(0, 4); // Select 4 pairs
+    const selectedPairs = shuffleArray(wordPairs).slice(0, 8);
 
     // Initialize each card with a rotateValue for animation
     const newCards = selectedPairs.flatMap((pair, pairIndex) => [
@@ -98,12 +89,6 @@ const MemoryFlipGame = () => {
       firstCard.vietnamese === secondCard.vietnamese;
 
     if (isMatch) {
-      const randomColor = getRandomColor();
-      const newCards = [...cards];
-      newCards[firstIndex].backgroundColor = randomColor;
-      newCards[secondIndex].backgroundColor = randomColor;
-      setCards(newCards);
-
       matchedIndicesRef.current = [...matchedIndicesRef.current, firstIndex, secondIndex];
       if (matchedIndicesRef.current.length !== cards.length)  
         setTimeout(() => {
@@ -182,7 +167,6 @@ const MemoryFlipGame = () => {
                     styles.cardBack,
                     {
                       backfaceVisibility: getBackfaceVisibility(card.isFlipped), // Dynamic visibility
-                      backgroundColor: matchedIndicesRef.current.includes(index) ? card.backgroundColor : '#fff',
                     },
                   ]}
                 >

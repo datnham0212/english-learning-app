@@ -28,7 +28,7 @@ const Game = () => {
                                 {game.image ? (
                                     <ImageBackground 
                                         source={game.image} 
-                                        resizeMode="cover" 
+                                        resizeMode="center"
                                         style={styles.imageBackground}
                                     >
                                         <Text style={styles.buttonText}>{game.label}</Text>
@@ -49,15 +49,15 @@ const Game = () => {
 const gameData = [
     [
         { label: 'Sentence Building', route: 'SentenceBuildingGame', image: require('../assets/game1.png') },
-        { label: 'Fill in the blanks', route: 'MultipleChoiceGame', image: require('../assets/game2.png') }
+        { label: 'Grammar Practice', route: 'MultipleChoiceGame', image: require('../assets/game2.png') }
     ],
     [
-        { label: 'Matching Translation', route: 'MemoryFlipGame' },
-        { label: 'Find the number', route: 'SchulteTable' }
+        { label: 'Matching Translation', route: 'MemoryFlipGame', image: require('../assets/game3.png') },
+        { label: 'Find the number', route: 'SchulteTable', image: require('../assets/game4.png') }
     ],
     [
-        { label: 'True or False', route: 'TrueOrFalseGame' },
-        { label: 'Counting Shapes', route: 'ShapeGame' }
+        { label: 'True or False', route: 'TrueOrFalseGame', image: require('../assets/game5.png')},
+        { label: 'Counting Shapes', route: 'ShapeGame', image: require('../assets/game6.png') }
     ]
 ];
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         width: width * 0.45,
         height: height * 0.35,
         margin: 10,
-        backgroundColor: '#ddd',
+        backgroundColor: 'white',
         justifyContent: 'flex-start', // Align text to the top
         alignItems: 'center',
         borderRadius: 20,

@@ -15,25 +15,17 @@ const Settings = React.memo(() => {
   const [checked, setChecked] = useState('en');
   const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
   const [volume, setVolume] = useState(0.5); // Volume state (range 0 - 1)
-  const [timer, setTimer] = useState(60); // Timer state (default 1 min)
+  const [timer, setTimer] = useState(0); // Timer state (default Off)
   const [musicOn, setMusicOn] = useState(true);  // Toggle state for music
   const [sfxState, setSfxState] = useState('volume-2');  // Toggle state for SFX (initially set to 'volume-2')
   const [vibrateOn, setVibrateOn] = useState(false);  // Toggle state for vibrate functionality
 
   const incrementTimer = () => {
-    if (timer === 30) {
-      setTimer(60);
-    } else if (timer === 60) {
-      setTimer(120);
-    }
+    setTimer(prev => (prev < 10 ? prev + 1 : 10));
   };
 
   const decrementTimer = () => {
-    if (timer === 120) {
-      setTimer(60);
-    } else if (timer === 60) {
-      setTimer(30);
-    }
+    setTimer(prev => (prev > 0 ? prev - 1 : 0));
   };
 
   const toggleMusic = () => setMusicOn(prev => !prev);  // Toggle music state
@@ -142,14 +134,14 @@ const Settings = React.memo(() => {
         <View style={styles.option}>
           <View style={styles.iconAndName}>
             <Icon1 name="timer" size={30} color="black" />
-            <Text style={styles.optionName}>Timer</Text>
+            <Text style={styles.optionName}>Timer (seconds)</Text>
           </View>
           <View style={styles.timerContainer}>
             <TouchableOpacity onPress={decrementTimer} style={styles.timerButton}>
               <Text style={styles.timerButtonText}>-</Text>
             </TouchableOpacity>
             <Text style={styles.timerValue}>
-              {timer === 30 ? '30 sec' : timer === 60 ? '1 min' : '2 min'}
+              {timer === 0 ? 'Off' : `${timer}`}
             </Text>
             <TouchableOpacity onPress={incrementTimer} style={styles.timerButton}>
               <Text style={styles.timerButtonText}>+</Text>
@@ -213,7 +205,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: '40%',
   },
   timerButton: {
     width: 35,
@@ -222,7 +214,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10,
   },
   timerButtonText: {
     color: '#000',
