@@ -42,41 +42,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     marginTop: 50, // Move the leaderboard down
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5', // Light gray background
+    borderRadius: 15, // Rounded container
+    overflow: 'hidden', // Ensure the overflow is rounded
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'tomato',
+    color: '#5E5E5E', // Dark gray title
     marginBottom: 20,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    padding: 10,
+    padding: 12,
     borderBottomWidth: 2,
-    borderBottomColor: 'tomato',
-    backgroundColor: '#ffe5e5',
+    borderBottomColor: '#9E9E9E', // Medium gray border for header
+    backgroundColor: '#BDBDBD', // Slightly darker gray background for header
+    borderTopLeftRadius: 15, // Rounded top-left corner
+    borderTopRightRadius: 15, // Rounded top-right corner
   },
   headerRank: {
     fontSize: 18,
     width: 50,
     fontWeight: 'bold',
-    color: 'tomato',
+    color: '#FFFFFF', // White text on gray background
   },
   headerName: {
     fontSize: 18,
     flex: 1,
     fontWeight: 'bold',
-    color: 'tomato',
+    color: '#FFFFFF', // White text on gray background
   },
   headerScore: {
     fontSize: 18,
     width: 50,
     textAlign: 'right',
     fontWeight: 'bold',
-    color: 'tomato',
+    color: '#FFFFFF', // White text on gray background
   },
   item: {
     flexDirection: 'row',
@@ -84,24 +88,26 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    backgroundColor: '#fff5f5',
+    borderBottomColor: '#E0E0E0', // Light gray divider between items
+    backgroundColor: '#FFFFFF', // White background for each item
+    borderRadius: 10, // Rounded item corners
+    marginVertical: 5, // Space between items
   },
   rank: {
     fontSize: 18,
     width: 50,
-    color: 'tomato',
+    color: '#5E5E5E', // Dark gray rank number
   },
   name: {
     fontSize: 18,
     flex: 1,
-    color: '#333',
+    color: '#333333', // Charcoal gray name text
   },
   score: {
     fontSize: 18,
     width: 50,
     textAlign: 'right',
-    color: '#333',
+    color: '#333333', // Charcoal gray score text
   },
 });
 

@@ -68,7 +68,7 @@ const ModalContainer = React.memo(({ title, onResume, onQuit, visible, onClose, 
             <ModalButton onPress={onQuit} icon={<MaterialIcon name="exit-run" size={40} color="white" />} color="red" />
           </View>
           
-          <ModalButton onPress={onResume} icon={<MaterialIcon name="motion-play-outline" size={40} color="white" />} color="#009E49" />
+          <ModalButton onPress={onResume} icon={<MaterialIcon name="motion-play-outline" size={40} color="white" />} color="#009E60" />
         </View>
       </View>
     </View>
@@ -120,7 +120,7 @@ const QuitGameButton = React.memo(() => {
         onPress={() => setModalVisible(true)}
         accessibilityLabel="Quit game button"
       >
-        <FeatherIcon name="x" size={25} color="dodgerblue" />
+        <FeatherIcon name="x" size={25} color="white" />
       </TouchableOpacity>
 
       <ModalContainer
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   button: {
     width: 40,
     height: 40,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+// import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Compete from '../tabs/Compete';
 import Leaderboard from '../tabs/Leaderboard';
+import UserProfile from './userProfile';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,14 +17,14 @@ export default function Navbar() {
             let iconName;
 
             if (route.name === 'Compete') {
-              iconName = 'shield';
+              iconName = 'sword-cross';
             } else if (route.name === 'Leaderboard') {
-              iconName = 'trophy';
+              iconName = 'medal';
             }
 
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Icon name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
+          tabBarActiveTintColor: '#009e60',
           tabBarInactiveTintColor: 'gray',
         })}
       >

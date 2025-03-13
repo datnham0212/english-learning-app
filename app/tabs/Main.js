@@ -19,7 +19,7 @@ const Main = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <TouchableOpacity 
-        style={[styles.mode_selection, { backgroundColor: 'dodgerblue' }]} 
+        style={[styles.mode_selection, { backgroundColor: 'dodgerblue' , width: width * 0.75}]} 
         onPress={() => navigation.navigate('Game')}
       >
         <View style={styles.iconTextContainer}>
@@ -28,11 +28,12 @@ const Main = ({ navigation }) => {
         </View>
       </TouchableOpacity>
       <TouchableOpacity 
-        style={[styles.mode_selection, { backgroundColor: '#fa2a55' }]} 
+        style={[styles.mode_selection, { backgroundColor: '#fa2a55' , width: width * 0.5, right: width * 0.12}]} 
         onPress={() => navigation.navigate('Online')}
       >
         <View style={styles.iconTextContainer}>
-          <Icon name="sword-cross" size={30} color="white" style={styles.icon} />
+          {/* <Icon name="sword-cross" size={30} color="white" style={styles.icon} /> */}
+          <Icon name='account-multiple-outline' size={30} color="white" style={styles.icon} />
           <Text style={styles.mode_name}>Online Mode</Text>
         </View>
       </TouchableOpacity>
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   },
   mode_selection: {
     width: width * 0.8,
-    height: width * 0.3,
+    height: height * 0.08,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',

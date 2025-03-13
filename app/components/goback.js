@@ -9,7 +9,7 @@ const GoBackButton = React.memo(() => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-        <Icon name="left" size={20} color="dodgerblue" />
+        <Icon name="left" size={25} color="black" />
       </TouchableOpacity>
     </View>
   );

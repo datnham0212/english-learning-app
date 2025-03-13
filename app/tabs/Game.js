@@ -57,7 +57,7 @@ const gameData = [
     ],
     [
         { label: 'True or False', route: 'TrueOrFalseGame', image: require('../assets/game5.png')},
-        { label: 'Counting Shapes', route: 'ShapeGame', image: require('../assets/game6.png') }
+        { label: 'Forming Words', route: 'UnscrambleWordsGame', image: require('../assets/game6.png') }
     ]
 ];
 

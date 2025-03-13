@@ -39,21 +39,36 @@ const MemoryFlipGame = () => {
   const [flippedIndices, setFlippedIndices] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [round, setRound] = useState(1); // Track current round
   const matchedIndicesRef = useRef([]); // Tracks matched indices persistently without causing re-renders
 
   useEffect(() => {
     startNewRound();
-  }, []);
+  }, [round]);
 
   const startNewRound = () => {
-    const selectedPairs = shuffleArray(wordPairs).slice(0, 4); // Select 4 pairs
+    let gridSize;
+    if (round <= 2) {
+      gridSize = { rows: 2, cols: 2 }; // 2x2 grid for the first 2 rounds
+    } else if (round <= 5) {
+      gridSize = { rows: 3, cols: 2 }; // 3x2 grid for rounds 3-5
+    } else if (round <= 9) {
+      gridSize = { rows: 4, cols: 2 }; // 4x2 grid for rounds 6-9
+    } else if (round <= 13) {
+      gridSize = { rows: 4, cols: 3 }; // 4x3 grid for rounds 10-13
+    } else {
+      gridSize = { rows: 4, cols: 4 }; // 4x4 grid for unlimited rounds after round 14
+    }
+
+    const totalCards = gridSize.rows * gridSize.cols;
+    const selectedPairs = shuffleArray(wordPairs).slice(0, totalCards / 2); // Select pairs for the grid
 
     // Initialize each card with a rotateValue for animation
     const newCards = selectedPairs.flatMap((pair, pairIndex) => [
       { ...pair, id: pairIndex * 2, type: 'english', isFlipped: false, rotateValue: new Animated.Value(0) },
       { ...pair, id: pairIndex * 2 + 1, type: 'vietnamese', isFlipped: false, rotateValue: new Animated.Value(0) },
     ]);
-    
+
     setCards(shuffleArray(newCards));
     setFlippedIndices([]);
     matchedIndicesRef.current = [];
@@ -70,7 +85,7 @@ const MemoryFlipGame = () => {
     setFlippedIndices(newFlippedIndices);
 
     setTimeout(() => {
-    playSound(require('../soundassets/FlippingCardsound/FCopen.mp3'));
+      playSound(require('../soundassets/FlippingCardsound/FCopen.mp3'));
     }, -1000);
     flipCard(index);
 
@@ -107,13 +122,15 @@ const MemoryFlipGame = () => {
       matchedIndicesRef.current = [...matchedIndicesRef.current, firstIndex, secondIndex];
       if (matchedIndicesRef.current.length !== cards.length)  
         setTimeout(() => {
-        playSound(require('../soundassets/FlippingCardsound/FCcorrect.mp3'));
+          playSound(require('../soundassets/FlippingCardsound/FCcorrect.mp3'));
         }, 600);
       setScore((prev) => prev + 1);
       if (matchedIndicesRef.current.length === cards.length) {
         setGameOver(true);
         playSound(require('../soundassets/FlippingCardsound/FCcongra.mp3'));
-        setTimeout(() => startNewRound(), 2000);
+        setTimeout(() => {
+          setRound((prev) => prev + 1); // Go to the next round
+        }, 2000);
       }
     } else {
       setTimeout(() => {
@@ -158,33 +175,16 @@ const MemoryFlipGame = () => {
               disabled={card.isFlipped || matchedIndicesRef.current.includes(index) || gameOver}
             >
               <Animated.View
-                style={[
-                  styles.cardInner,
-                  {
-                    transform: [{ rotateY: rotate }],
-                  },
-                ]}
+                style={[styles.cardInner, { transform: [{ rotateY: rotate }] }]}
               >
                 <View
-                  style={[
-                    styles.cardFace,
-                    styles.cardFront,
-                    {
-                      backfaceVisibility: getBackfaceVisibility(card.isFlipped), // Dynamic visibility
-                    },
-                  ]}
-                >
-
-                </View>
+                  style={[styles.cardFace, styles.cardFront, { backfaceVisibility: getBackfaceVisibility(card.isFlipped) }]}
+                ></View>
                 <View
-                  style={[
-                    styles.cardFace,
-                    styles.cardBack,
-                    {
-                      backfaceVisibility: getBackfaceVisibility(card.isFlipped), // Dynamic visibility
-                      backgroundColor: matchedIndicesRef.current.includes(index) ? card.backgroundColor : '#fff',
-                    },
-                  ]}
+                  style={[styles.cardFace, styles.cardBack, {
+                    backfaceVisibility: getBackfaceVisibility(card.isFlipped),
+                    backgroundColor: matchedIndicesRef.current.includes(index) ? card.backgroundColor : '#fff',
+                  }]}
                 >
                   <Text style={styles.cardText}>
                     {card.isFlipped || matchedIndicesRef.current.includes(index)
@@ -210,27 +210,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     width: '100%',
-    perspective: 1000, // This enables 3D transformations
+    perspective: 1000,
   },
   card: {
-    width: '22%', // Adjusted to fit 4 cards per row
+    width: '22%',
     height: 80,
     margin: '1%',
   },
   cardInner: {
     width: '100%',
     height: '100%',
-    transformStyle: 'preserve-3d', // Preserve 3D transformation for flipping
+    transformStyle: 'preserve-3d',
   },
   cardFace: {
     position: 'absolute',
@@ -238,17 +233,17 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backfaceVisibility: 'hidden', // Default to hidden, will be toggled on flip
+    backfaceVisibility: 'hidden',
     borderRadius: 10,
   },
   cardFront: {
     backgroundColor: '#ccc',
   },
   cardBack: {
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ rotateY: '180deg' }], // Rotate the back side 180 degrees to be shown
+    transform: [{ rotateY: '180deg' }],
   },
   cardText: {
     fontSize: 18,

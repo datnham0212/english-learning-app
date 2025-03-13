@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Animated, StyleSheet, PanResponder } from 'react-native';
+import Scoreboard from '../components/score';
+import QuitGameButton from '../components/quitgame';
+import { playSound } from '../sound/SenBuild';
 
 const shuffleArray = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -11,6 +14,11 @@ const shuffleArray = (array) => {
     array[randomIndex] = temporaryValue;
   }
   return array;
+};
+
+const getRandomLetter = () => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  return letters[Math.floor(Math.random() * letters.length)];
 };
 
 const UnscrambleWordsGame = () => {
@@ -37,6 +45,15 @@ const UnscrambleWordsGame = () => {
       key: `${index}`,
       letter,
     }));
+
+    // Add random letters to make up 8 letters
+    while (letters.length < 8) {
+      letters.push({
+        key: `${letters.length}`,
+        letter: getRandomLetter(),
+      });
+    }
+
     setScrambledLetters(shuffleArray([...letters]));
     setSelectedLetters([]);
     setCurrentImage(selectedWord.image);
@@ -47,22 +64,15 @@ const UnscrambleWordsGame = () => {
     loadNewWord();
   }, []);
 
-  const handleLetterPress = (letter, index) => {
-    setSelectedLetters((prev) => [...prev, letter]);
-    setScrambledLetters((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleDrag = (index, panResponder) => {
-    return panResponder.panHandlers;
-  };
-
   const handleDrop = (index, gestureState, fromScrambled = true) => {
     if (fromScrambled) {
       setSelectedLetters((prev) => [...prev, scrambledLetters[index]]);
       setScrambledLetters((prev) => prev.filter((_, i) => i !== index));
+      playSound(require('../soundassets/SentBuildSound/SBclick.mp3'));
     } else {
       setScrambledLetters((prev) => [...prev, selectedLetters[index]]);
       setSelectedLetters((prev) => prev.filter((_, i) => i !== index));
+      playSound(require('../soundassets/SentBuildSound/SBremoveclick.mp3'));
     }
   };
 
@@ -73,12 +83,14 @@ const UnscrambleWordsGame = () => {
     if (userAnswer === currentWord) {
       setScore(prevScore => prevScore + 1);
       setFeedbackMessage('Correct! You unscrambled the word!');
+      playSound(require('../soundassets/SentBuildSound/SBcorrect.mp3'));
       setTimeout(() => {
         setFeedbackMessage('');
         loadNewWord();
       }, 500);
     } else if (selectedLetters.length === currentWord.length) {
       setFeedbackMessage('Wrong! Try again.');
+      playSound(require('../soundassets/SentBuildSound/SBincorrect.mp3'));
       setTimeout(() => {
         setFeedbackMessage('');
         setSelectedLetters([]);
@@ -92,7 +104,8 @@ const UnscrambleWordsGame = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.score}>Score: {score}</Text>
+      <QuitGameButton />
+      <Scoreboard score={score}/>
 
       {currentImage && (
         <Image source={currentImage} style={styles.image} />

@@ -1,6 +1,8 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const { width, height } = Dimensions.get('window');
 
 const SettingsButton = ({ onPress }) => {
   return (
@@ -16,10 +18,10 @@ const SettingsButton = ({ onPress }) => {
 const styles = {
   settingsButton: {
     position: 'absolute',
-    top: 50,
-    right: 20,
-    width: 50,
-    height: 50,
+    top: height * 0.69,
+    right: width * 0.13,
+    width: height * 0.08,
+    height: height * 0.08,
     backgroundColor: 'grey',
     borderRadius: 10,
     alignItems: 'center',

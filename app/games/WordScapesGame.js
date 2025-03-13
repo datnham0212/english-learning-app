@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
-// Get device dimensions
+
 const { width, height } = Dimensions.get('window');
 
 const WordScapesGame = () => {
-  // Array of letters to display around the circle
-  const letters = ['A', 'B', 'C', 'D', 'E'];
+  // Array of all 26 letters
+  const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(i + 65)); // ['A', 'B', 'C', ..., 'Z']
 
   // State to track selected letters
   const [selectedLetters, setSelectedLetters] = useState([]);
@@ -16,13 +16,7 @@ const WordScapesGame = () => {
   const [correctWords, setCorrectWords] = useState([]);
 
   // Simple word dictionary for validation
-  const validWords = ['ABC', 'ACE', 'BAD', 'BED', 'ADD', 'DAD'];
-
-  // Calculate the angle between each letter box
-  const angleStep = (2 * Math.PI) / letters.length;
-
-  // Adjust radius to prevent overlap with the circle's edges
-  const boxRadius = 100;
+  const validWords = ['ABC', 'ACE', 'BAD', 'BED', 'ADD', 'DAD', 'FIG', 'JIG', 'HAD', 'FED'];
 
   // Handle letter box press
   const handleLetterPress = (letter) => {
@@ -47,34 +41,12 @@ const WordScapesGame = () => {
     <View style={styles.container}>
       <QuitGameButton />
       {/* <Scoreboard score={score} /> */}
-      {/* Circle */}
-      <View style={styles.circle}>
-        {/* Render letter boxes */}
-        {letters.map((letter, index) => {
-          const angle = angleStep * index;
-          const x = Math.cos(angle) * boxRadius;
-          const y = Math.sin(angle) * boxRadius;
-
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleLetterPress(letter)}
-              style={[
-                styles.letterBox,
-                { transform: [{ translateX: x }, { translateY: y }] },
-              ]}
-            >
-              <Text style={styles.letter}>{letter}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
+      
       {/* Formed word grid */}
       <View style={styles.wordContainer}>
         {selectedLetters.map((letter, index) => (
-          <View key={index} style={styles.letterBoxInWord}>
-            <Text style={styles.letter}>{letter}</Text>
+          <View key={index} style={styles.letterBoxSelected}>
+            <Text style={styles.letterText}>{letter}</Text>
           </View>
         ))}
       </View>
@@ -84,11 +56,25 @@ const WordScapesGame = () => {
         {correctWords.map((word, index) => (
           <View key={index} style={styles.correctWordRow}>
             {word.split('').map((letter, letterIndex) => (
-              <View key={letterIndex} style={styles.letterBoxInWord}>
-                <Text style={styles.letter}>{letter}</Text>
+              <View key={letterIndex} style={styles.letterBoxSelected}>
+                <Text style={styles.letterText}>{letter}</Text>
               </View>
             ))}
           </View>
+        ))}
+      </View>
+
+      {/* Rectangle */}
+      <View style={styles.lettersContainer}>
+        {/* Render letter boxes */}
+        {letters.map((letter, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleLetterPress(letter)}
+            style={styles.letterBox}
+          >
+            <Text style={styles.letterText}>{letter}</Text>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
@@ -98,36 +84,37 @@ const WordScapesGame = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f9f9f9',
+    justifyContent: 'center',
     padding: 16,
+    borderRadius: 10,
+    width: '100%',
+    backgroundColor: '#fffbf1',
   },
-  circle: {
+  lettersContainer: {
     position: 'absolute',
-    bottom: height * 0.1,
-    width: 280,
-    height: 280,
-    borderRadius: 140,
-    backgroundColor: '#3498db',
+    bottom: height * 0.1, // Position it near the bottom of the screen
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center',
+    width: '90%',
+    paddingHorizontal: 8,
   },
   letterBox: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
+    flexBasis: '18%',
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: '#3498db',
+    borderRadius: 12,
+    margin: 6,
+    borderWidth: 2,
+    borderColor: '#ccc',
   },
-  letter: {
-    fontSize: 18,
+  letterText: {
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#3498db',
+    color: '#333',
   },
   wordContainer: {
     position: 'absolute',
@@ -137,16 +124,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 30, // Some margin below the formed word
   },
-  letterBoxInWord: {
-    width: 40,
-    height: 40,
+  letterBoxSelected: {
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#3498db',
-    marginRight: 10, // Space between the letters
+    backgroundColor: '#a5d8ff',
+    borderRadius: 12,
+    margin: 6,
+    borderWidth: 2,
+    borderColor: '#ccc',
   },
   correctWordsContainer: {
     position: 'absolute',
