@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
-const users = Array.from({ length: 50 }, (v, k) => ({
+const users = Array.from({ length: 10 }, (v, k) => ({
   id: (k + 1).toString(),
   name: `User ${k + 1}`,
   score: Math.floor(Math.random() * 200) + 1,

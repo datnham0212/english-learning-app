@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Modal, TextInput, Button, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../context/UserContext';
 import GoBackButton from '../components/goback';
 import { playSound } from '../sound/opensound';
 import UserProfile from '../components/userProfile';
 
 const Compete = React.memo(() => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = React.useState(true);
-  const [name, setName] = React.useState('');
+  const { name, setName, isOnline } = React.useContext(UserContext);
+  const [modalVisible, setModalVisible] = React.useState(isOnline && !name);
 
   const handlePress = (route) => {
     playSound(require('../soundassets/opensound.mp3'));
@@ -24,7 +25,7 @@ const Compete = React.memo(() => {
   const handleModalClose = () => {
     setModalVisible(false);
     if (!name.trim()) {
-      navigation.goBack(); // Replace 'Main' with the actual route name of your main menu
+      navigation.navigate('Main'); // Replace 'Main' with the actual route name of your main menu
     }
   };
 
@@ -65,30 +66,32 @@ const Compete = React.memo(() => {
           </View>
         ))}
       </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleModalClose}
-        onDismiss={handleModalClose}
-      >
-        <TouchableWithoutFeedback onPress={handleModalClose}>
-          <View style={styles.modalContainer}>
-            <TouchableWithoutFeedback>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Enter your name:</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Your name"
-                  value={name}
-                  onChangeText={setName}
-                />
-                <Button title="Submit" onPress={handleNameSubmit} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+      {isOnline && (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleModalClose}
+          onDismiss={handleModalClose}
+        >
+          <TouchableWithoutFeedback onPress={handleModalClose}>
+            <View style={styles.modalContainer}>
+              <TouchableWithoutFeedback>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>Enter your name:</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Your name"
+                    value={name}
+                    onChangeText={setName}
+                  />
+                  <Button title="Submit" onPress={handleNameSubmit} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      )}
     </View>
   );
 });
