@@ -35,7 +35,8 @@
     "react-native-svg": "15.8.0",
     "react-native-switch": "^1.5.1",
     "react-native-vector-icons": "^10.2.0",
-    "source-map": "^0.7.4"
+    "source-map": "^0.7.4",
+    "expo-navigation-bar": "~4.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

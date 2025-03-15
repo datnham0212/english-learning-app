@@ -18,8 +18,8 @@ const SettingsButton = ({ onPress }) => {
 const styles = {
   settingsButton: {
     position: 'absolute',
-    top: height * 0.69,
-    right: width * 0.13,
+    top: height * 0.155,
+    right: width * 0.01,
     width: height * 0.08,
     height: height * 0.08,
     backgroundColor: 'grey',

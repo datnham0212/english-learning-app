@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SettingsButton from '../components/settingsButton';
@@ -16,40 +16,53 @@ const Main = ({ navigation }) => {
     );
   } 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require('../assets/background.png')} style={styles.background}>
       <StatusBar style="auto" />
-      <TouchableOpacity 
-        style={[styles.mode_selection, { backgroundColor: 'dodgerblue' , width: width * 0.75}]} 
-        onPress={() => navigation.navigate('Game')}
-      >
-        <View style={styles.iconTextContainer}>
-          <Icon name="play" size={30} color="white" style={styles.icon} />
-          <Text style={styles.mode_name}>Start</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        style={[styles.mode_selection, { backgroundColor: '#fa2a55' , width: width * 0.5, right: width * 0.12}]} 
-        onPress={() => navigation.navigate('Online')}
-      >
-        <View style={styles.iconTextContainer}>
-          {/* <Icon name="sword-cross" size={30} color="white" style={styles.icon} /> */}
-          <Icon name='account-multiple-outline' size={30} color="white" style={styles.icon} />
-          <Text style={styles.mode_name}>Online Mode</Text>
-        </View>
-      </TouchableOpacity>
-      <SettingsButton onPress={() => navigation.navigate('Settings')} />
-    </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={[styles.mode_selection, { backgroundColor: 'dodgerblue', width: width * 0.75 }]} 
+          onPress={() => navigation.navigate('Game')}
+        >
+          <View style={styles.iconTextContainer}>
+            <Icon name="play" size={30} color="white" style={styles.icon} />
+            <Text style={styles.mode_name}>Start</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.mode_selection, { backgroundColor: '#fa2a55', width: width * 0.5, right: width * 0.12 }]} 
+          onPress={() => navigation.navigate('Online')}
+        >
+          <View style={styles.iconTextContainer}>
+            <Icon name='account-multiple-outline' size={30} color="white" style={styles.icon} />
+            <Text style={styles.mode_name}>Online Mode</Text>
+          </View>
+        </TouchableOpacity>
+        <SettingsButton onPress={() => navigation.navigate('Settings')} />
+      </View>
+    </ImageBackground>
   );
 };
 
 export default Main;  
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: height * 0.3,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: height * 0.28,
   },
   mode_selection: {
     width: width * 0.8,

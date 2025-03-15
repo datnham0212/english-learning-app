@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QuitGameButton from '../components/quitgame';
 import Scoreboard from '../components/score';
 import { playSound } from '../sound/FinNum';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as Speech from 'expo-speech';
 
 // Constants
 const GRID_SIZES = { 3: 9, 4: 16, 5: 25, 6: 36 };
@@ -59,6 +61,9 @@ const SchulteTable = () => {
   const [score, setScore] = useState(0);
   const [targetNumber, setTargetNumber] = useState(null);
   const [gridSize, setGridSize] = useState(3);
+  
+  // Ref to track the last spoken target number to prevent duplicate speech
+  const lastSpokenTargetRef = useRef(null);
 
   // Effects
   useEffect(() => {
@@ -76,24 +81,38 @@ const SchulteTable = () => {
     }
   }, [selectedNumbers, score]);
 
+  useEffect(() => {
+    if (targetNumber !== null && targetNumber !== lastSpokenTargetRef.current) {
+      handleReadNumber();
+      lastSpokenTargetRef.current = targetNumber; // Update the last spoken target
+    }
+  }, [targetNumber]);
+
   // Game logic
   const handleNumberSelect = (number) => {
     const targetWord = numberToWords(targetNumber);
     if (numberToWords(number) === targetWord && !selectedNumbers.includes(number)) {
-      playSound(require('../soundassets/FindNumsound/FiNumcorrect.mp3'));
+      playSound(require('../soundassets/FindNumsound/FiNumcorrect.mp3')); // Correct selection sound
       setTimeout(() => {
         setSelectedNumbers((prev) => [...prev, number]);
         setScore((prev) => prev + 1);
-        setTargetNumber(generateRandomTargetNumber());
       }, 150);
     } else {
       setIncorrectSelections((prev) => [...prev, number]);
-      playSound(require('../soundassets/FindNumsound/FiNumincorrect.mp3'));
+      playSound(require('../soundassets/FindNumsound/FiNumincorrect.mp3')); // Incorrect selection sound
       setTimeout(() => {
         setIncorrectSelections((prev) => prev.filter((num) => num !== number));
       }, 500);
     }
   };
+  
+  // Effects
+  useEffect(() => {
+    const target = generateRandomTargetNumber();
+    if (target !== null) setTargetNumber(target);  // This ensures target is updated once
+  }, [numbersToFind, selectedNumbers]);
+  
+  
 
   const generateRandomTargetNumber = () => {
     const unselected = numbersToFind.filter((num) => !selectedNumbers.includes(num));
@@ -112,10 +131,16 @@ const SchulteTable = () => {
   };
 
   const getNextGridSize = () => {
-    if (score >= 50*8) return 6;
-    if (score >= 25*6) return 5;
-    if (score >= 9*4) return 4;
+    if (score >= 50 * 8) return 6;
+    if (score >= 25 * 6) return 5;
+    if (score >= 9 * 4) return 4;
     return 3;
+  };
+
+  // Function to read the target number aloud
+  const handleReadNumber = () => {
+    const targetWord = numberToWords(targetNumber);
+    Speech.speak(targetWord); // Speak the target number
   };
 
   // Grid rendering
@@ -150,7 +175,9 @@ const SchulteTable = () => {
     <View style={styles.container}>
       <QuitGameButton />
       <Scoreboard score={score} />
-      <Text style={styles.targetNumberText}>Find: {targetNumber} ({numberToWords(targetNumber)})</Text>
+      <TouchableOpacity style={styles.readButton} onPress={handleReadNumber}>
+        <MaterialIcon name="volume-high" size={25} color="white" />
+      </TouchableOpacity>
       <View style={styles.grid}>{renderGrid()}</View>
     </View>
   );
@@ -165,11 +192,13 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f9f9f9',
   },
-  targetNumberText: {
-    fontSize: 20,
+  readButton: {
+    backgroundColor: '#008CBA',
+    padding: 20,
+    borderRadius: '50%',
     marginBottom: 20,
-    fontWeight: 'bold',
-    color: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   grid: {
     marginTop: 20,
@@ -195,10 +224,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   selectedCell: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: '#4ECDC4', // Green for correct selection
   },
   incorrectCell: {
-    backgroundColor: 'red',
+    backgroundColor: 'red', // Red for incorrect selection
   },
 });
 
