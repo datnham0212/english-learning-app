@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SettingsButton from '../components/settingsButton';
@@ -16,7 +16,7 @@ const Main = ({ navigation }) => {
     );
   } 
   return (
-    <ImageBackground source={require('../assets/background.png')} style={styles.background}>
+    <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
@@ -39,25 +39,19 @@ const Main = ({ navigation }) => {
         </TouchableOpacity>
         <SettingsButton onPress={() => navigation.navigate('Settings')} />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
 export default Main;  
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     height: '100%',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: height * 0.3,
   },
   buttonContainer: {
     alignItems: 'center',
