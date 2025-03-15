@@ -58,7 +58,11 @@ const gameData = [
     [
         { label: 'True or False', route: 'TrueOrFalseGame', image: require('../assets/game5.png')},
         { label: 'Forming Words', route: 'UnscrambleWordsGame', image: require('../assets/game6.png') }
-    ]
+    ],
+    // [
+    //     { label: 'Listening Game', route: 'ListeningGame', image: require('../assets/game7.png') },
+    //     { label: 'Memory Game', route: 'ListeningGame', image: require('../assets/game8.png') }
+    // ]
 ];
 
 const { width, height } = Dimensions.get('window');

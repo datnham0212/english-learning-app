@@ -5,22 +5,22 @@ import Scoreboard from '../components/score';
 import { playSound } from '../sound/FlippingCard';
 
 const wordPairs = [
-  { english: 'Cat', vietnamese: 'Mèo' }, // Noun
-  { english: 'Dog', vietnamese: 'Chó' }, // Noun
-  { english: 'Happy', vietnamese: 'Vui' }, // Adjective
-  { english: 'Sad', vietnamese: 'Buồn' }, // Adjective
-  { english: 'Run', vietnamese: 'Chạy' }, // Verb
-  { english: 'Eat', vietnamese: 'Ăn' }, // Verb
-  { english: 'Big', vietnamese: 'Lớn' }, // Adjective
-  { english: 'Small', vietnamese: 'Nhỏ' }, // Adjective
-  { english: 'Book', vietnamese: 'Sách' }, // Noun
-  { english: 'Table', vietnamese: 'Bàn' }, // Noun
-  { english: 'Jump', vietnamese: 'Nhảy' }, // Verb
-  { english: 'Sleep', vietnamese: 'Ngủ' }, // Verb
-  { english: 'Beautiful', vietnamese: 'Đẹp' }, // Adjective
-  { english: 'Fast', vietnamese: 'Nhanh' }, // Adjective
-  { english: 'Friend', vietnamese: 'Bạn' }, // Noun
-  { english: 'Work', vietnamese: 'Làm' }, // Verb
+  { english: 'Cat', vietnamese: 'Mèo' },
+  { english: 'Dog', vietnamese: 'Chó' },
+  { english: 'Happy', vietnamese: 'Vui' },
+  { english: 'Sad', vietnamese: 'Buồn' },
+  { english: 'Run', vietnamese: 'Chạy' },
+  { english: 'Eat', vietnamese: 'Ăn' },
+  { english: 'Big', vietnamese: 'Lớn' },
+  { english: 'Small', vietnamese: 'Nhỏ' },
+  { english: 'Book', vietnamese: 'Sách' },
+  { english: 'Table', vietnamese: 'Bàn' },
+  { english: 'Jump', vietnamese: 'Nhảy' },
+  { english: 'Sleep', vietnamese: 'Ngủ' },
+  { english: 'Beautiful', vietnamese: 'Đẹp' },
+  { english: 'Fast', vietnamese: 'Nhanh' },
+  { english: 'Friend', vietnamese: 'Bạn' },
+  { english: 'Work', vietnamese: 'Làm' },
 ];
 
 const shuffleArray = (array) => [...array].sort(() => 0.5 - Math.random());
@@ -39,31 +39,31 @@ const MemoryFlipGame = () => {
   const [flippedIndices, setFlippedIndices] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const [round, setRound] = useState(1); // Track current round
-  const matchedIndicesRef = useRef([]); // Tracks matched indices persistently without causing re-renders
+  const [round, setRound] = useState(1);
+  const [gridLayout, setGridLayout] = useState({ rows: 2, cols: 2 }); // Default to 2x2 grid
+  const matchedIndicesRef = useRef([]);
 
   useEffect(() => {
     startNewRound();
   }, [round]);
 
   const startNewRound = () => {
-    let gridSize;
+    let gridConfig;
     if (round <= 2) {
-      gridSize = { rows: 2, cols: 2 }; // 2x2 grid for the first 2 rounds
+      gridConfig = { rows: 2, cols: 2 }; // 2x2 grid for the first 2 rounds
     } else if (round <= 5) {
-      gridSize = { rows: 3, cols: 2 }; // 3x2 grid for rounds 3-5
+      gridConfig = { rows: 3, cols: 2 }; // 3x2 grid for rounds 3-5
     } else if (round <= 9) {
-      gridSize = { rows: 4, cols: 2 }; // 4x2 grid for rounds 6-9
+      gridConfig = { rows: 4, cols: 2 }; // 4x2 grid for rounds 6-9
     } else if (round <= 13) {
-      gridSize = { rows: 4, cols: 3 }; // 4x3 grid for rounds 10-13
+      gridConfig = { rows: 4, cols: 3 }; // 4x3 grid for rounds 10-13
     } else {
-      gridSize = { rows: 4, cols: 4 }; // 4x4 grid for unlimited rounds after round 14
+      gridConfig = { rows: 4, cols: 4 }; // 4x4 grid for unlimited rounds after round 14
     }
 
-    const totalCards = gridSize.rows * gridSize.cols;
-    const selectedPairs = shuffleArray(wordPairs).slice(0, totalCards / 2); // Select pairs for the grid
+    const totalCards = gridConfig.rows * gridConfig.cols;
+    const selectedPairs = shuffleArray(wordPairs).slice(0, totalCards / 2);
 
-    // Initialize each card with a rotateValue for animation
     const newCards = selectedPairs.flatMap((pair, pairIndex) => [
       { ...pair, id: pairIndex * 2, type: 'english', isFlipped: false, rotateValue: new Animated.Value(0) },
       { ...pair, id: pairIndex * 2 + 1, type: 'vietnamese', isFlipped: false, rotateValue: new Animated.Value(0) },
@@ -73,10 +73,12 @@ const MemoryFlipGame = () => {
     setFlippedIndices([]);
     matchedIndicesRef.current = [];
     setGameOver(false);
+    setGridLayout(gridConfig); // Set the grid layout (rows, cols)
   };
 
   const handleCardPress = (index) => {
     if (flippedIndices.length === 2 || gameOver || cards[index].isFlipped || matchedIndicesRef.current.includes(index)) return;
+
     const newCards = [...cards];
     newCards[index].isFlipped = true;
     setCards(newCards);
@@ -150,13 +152,17 @@ const MemoryFlipGame = () => {
   const rotateInterpolation = (rotateValue) => {
     return rotateValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'], // Adjusted to rotate around Y-axis properly
+      outputRange: ['0deg', '180deg'],
     });
   };
 
-  // Function to change the backfaceVisibility based on flipped state
   const getBackfaceVisibility = (isFlipped) => {
     return isFlipped ? 'visible' : 'hidden';
+  };
+
+  const getCardWidth = () => {
+    const { cols } = gridLayout;
+    return `${100 / cols - 4}%`; // Calculate the width based on the number of columns
   };
 
   return (
@@ -170,7 +176,7 @@ const MemoryFlipGame = () => {
           return (
             <TouchableOpacity
               key={card.id}
-              style={styles.card}
+              style={[styles.card, { width: getCardWidth() }]}
               onPress={() => handleCardPress(index)}
               disabled={card.isFlipped || matchedIndicesRef.current.includes(index) || gameOver}
             >
@@ -218,9 +224,8 @@ const styles = StyleSheet.create({
     perspective: 1000,
   },
   card: {
-    width: '22%',
-    height: 80,
-    margin: '1%',
+    height: 120,
+    margin: '1.5%',
   },
   cardInner: {
     width: '100%',
